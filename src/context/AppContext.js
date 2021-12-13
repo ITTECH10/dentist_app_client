@@ -8,13 +8,21 @@ export const useApp = () => {
 
 const AppContextProvider = ({ children }) => {
     const [authenticated, setAuthenticated] = React.useState(false)
-    const [appLoading, setAppLoading] = React.useState(false)
+    const [appLoading, setAppLoading] = React.useState(true)
+    const [generalAlertOptions, setGeneralAlertOptions] = React.useState({
+        open: false,
+        message: '',
+        severity: '',
+        hideAfter: 5000
+    })
 
     const value = {
         authenticated,
         setAuthenticated,
         setAppLoading,
-        appLoading
+        appLoading,
+        generalAlertOptions,
+        setGeneralAlertOptions
     }
 
     return (

@@ -5,24 +5,17 @@ import { mockImgAvatar } from '../utils/mockImages';
 
 // ----------------------------------------------------------------------
 
-const users = [...Array(24)].map((_, index) => ({
+const users = [...Array(6)].map((_, index) => ({
   id: faker.datatype.uuid(),
   avatarUrl: mockImgAvatar(index + 1),
   name: faker.name.findName(),
-  company: faker.company.companyName(),
+  birthDate: faker.date.past(),
   isVerified: faker.datatype.boolean(),
-  status: sample(['active', 'banned']),
+  status: sample(['lose', 'dobro']),
   role: sample([
-    'Leader',
-    'Hr Manager',
-    'UI Designer',
-    'UX Designer',
-    'UI/UX Designer',
-    'Project Manager',
-    'Backend Developer',
-    'Full Stack Designer',
-    'Front End Developer',
-    'Full Stack Developer'
+    'Asistent',
+    'Direktor',
+    'Zamjenik'
   ])
 }));
 

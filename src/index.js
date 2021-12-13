@@ -5,6 +5,8 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import AppContextProvider from './context/AppContext'
+import EmployeeContextProvider from './context/EmployeeContext'
+import PacientContextProvider from './context/PacientContext'
 
 //
 import App from './App';
@@ -21,11 +23,15 @@ axios.defaults.baseURL = 'http://localhost:8000/api/v1'
 
 ReactDOM.render(
   <AppContextProvider>
-    <HelmetProvider>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </HelmetProvider>
+    <EmployeeContextProvider>
+      <PacientContextProvider>
+        <HelmetProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </HelmetProvider>
+      </PacientContextProvider>
+    </EmployeeContextProvider>
   </AppContextProvider>,
   document.getElementById('root')
 );

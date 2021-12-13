@@ -1,3 +1,4 @@
+import { usePacientContext } from './../../../context/PacientContext'
 import { Icon } from '@iconify/react';
 import NumberOfPacients from '@iconify/icons-eva/people-fill';
 // material
@@ -37,12 +38,14 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 const TOTAL = 83;
 
 export default function AppWeeklySales() {
+  const { pacients } = usePacientContext()
+
   return (
     <RootStyle>
       <IconWrapperStyle>
         <Icon icon={NumberOfPacients} width={24} height={24} />
       </IconWrapperStyle>
-      <Typography variant="h3">{fShortenNumber(TOTAL)}</Typography>
+      <Typography variant="h3">{fShortenNumber(pacients.length)}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
         Broj Pacijenata
       </Typography>

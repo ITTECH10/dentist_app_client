@@ -40,6 +40,7 @@
     "@emotion/styled": "^11.3.0",
     "@iconify/icons-ant-design": "^1.1.0",
     "@iconify/icons-bi": "^1.1.12",
+    "@iconify/icons-clarity": "^1.1.2",
     "@iconify/icons-eva": "^1.1.0",
     "@iconify/icons-ic": "^1.1.10",
     "@iconify/react": "^3.0.1",

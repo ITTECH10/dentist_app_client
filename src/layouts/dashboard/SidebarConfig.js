@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react';
 import pieChart2Fill from '@iconify/icons-eva/briefcase-fill';
 import peopleFill from '@iconify/icons-eva/people-fill';
+import employeesFill from '@iconify/icons-clarity/employee-group-solid';
 import shoppingBagFill from '@iconify/icons-eva/shopping-bag-fill';
 import fileTextFill from '@iconify/icons-eva/file-text-fill';
 import lockFill from '@iconify/icons-eva/lock-fill';
@@ -19,14 +20,14 @@ const sidebarConfig = [
   },
   {
     title: 'Pacijenti',
-    path: '/dashboard/user',
+    path: '/dashboard/pacients',
     icon: getIcon(peopleFill)
   },
-  // {
-  //   title: 'product',
-  //   path: '/dashboard/products',
-  //   icon: getIcon(shoppingBagFill)
-  // },
+  {
+    title: 'Zaposleni',
+    path: '/dashboard/employees',
+    icon: getIcon(employeesFill)
+  },
   // {
   //   title: 'blog',
   //   path: '/dashboard/blog',

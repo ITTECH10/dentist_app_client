@@ -9,6 +9,7 @@ import ScrollToTop from './components/ScrollToTop';
 import { BaseOptionChartStyle } from './components/charts/BaseOptionChart';
 import jwtDecode from 'jwt-decode'
 import { useApp } from './context/AppContext'
+import { usePacientContext } from './context/PacientContext'
 import useLocalStorage from './hooks/useLocalStorage'
 import Loader from './components/Loader/Loader'
 
@@ -16,7 +17,8 @@ import Loader from './components/Loader/Loader'
 
 export default function App() {
   const [token, setToken] = useLocalStorage('token', '')
-  const { setAuthenticated, setAppLoading, appLoading } = useApp()
+  const { setAuthenticated, appLoading } = useApp()
+  const { getAllPacients } = usePacientContext()
 
   useEffect(() => {
     if (token) {
@@ -28,7 +30,7 @@ export default function App() {
       } else {
         // store.dispatch({type: SET_AUTHENTICATED})
         setAuthenticated(true)
-        setAppLoading(false)
+        getAllPacients()
       }
     }
   }, [token, setAuthenticated])

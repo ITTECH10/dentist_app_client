@@ -4,6 +4,7 @@ import { sentenceCase } from 'change-case';
 import { useState } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
+import { usePacientContext } from './../context/PacientContext';
 // material
 import {
   Card,
@@ -33,10 +34,10 @@ import USERLIST from '../_mocks_/user';
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Ime', alignRight: false },
-  { id: 'company', label: 'Kompanija', alignRight: false },
-  { id: 'role', label: 'Uloga', alignRight: false },
-  { id: 'isVerified', label: 'Verifikovan', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
+  { id: 'birthDate', label: 'Datum rođenja', alignRight: false },
+  { id: 'gender', label: 'Spol', alignRight: false },
+  { id: 'phone', label: 'Telefon', alignRight: false },
+  { id: 'status', label: 'Stanje', alignRight: false },
   { id: '' }
 ];
 
@@ -66,12 +67,13 @@ function applySortFilter(array, comparator, query) {
     return a[1] - b[1];
   });
   if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+    return filter(array, (_user) => `${_user.firstName} ${_user.lastName}`.toLowerCase().indexOf(query.toLowerCase()) !== -1);
   }
   return stabilizedThis.map((el) => el[0]);
 }
 
 export default function User() {
+  const { pacients } = usePacientContext()
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -87,7 +89,7 @@ export default function User() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
+      const newSelecteds = pacients.map((n) => n.name);
       setSelected(newSelecteds);
       return;
     }
@@ -125,9 +127,9 @@ export default function User() {
     setFilterName(event.target.value);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - pacients.length) : 0;
 
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
+  const filteredUsers = applySortFilter(pacients, getComparator(order, orderBy), filterName);
 
   const isUserNotFound = filteredUsers.length === 0;
 
@@ -153,6 +155,7 @@ export default function User() {
             numSelected={selected.length}
             filterName={filterName}
             onFilterName={handleFilterByName}
+            placeholderRole="Pronađite pacijenta..."
           />
 
           <Scrollbar>
@@ -171,13 +174,16 @@ export default function User() {
                   {filteredUsers
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
-                      const { id, name, role, status, company, avatarUrl, isVerified } = row;
+                      const name = row.firstName + ' ' + row.lastName
+                      const avatarUrl = '/static/mock-images/avatars/avatar_11.jpg'
+                      const status = 'Loše'
+                      const { _id, birthDate, role, phone, gender } = row;
                       const isItemSelected = selected.indexOf(name) !== -1;
 
                       return (
                         <TableRow
                           hover
-                          key={id}
+                          key={_id}
                           tabIndex={-1}
                           role="checkbox"
                           selected={isItemSelected}
@@ -197,15 +203,16 @@ export default function User() {
                               </Typography>
                             </Stack>
                           </TableCell>
-                          <TableCell align="left">{company}</TableCell>
-                          <TableCell align="left">{role}</TableCell>
-                          <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
+                          <TableCell align="left">{new Date(birthDate).toLocaleDateString()}</TableCell>
+                          <TableCell align="left">{gender}</TableCell>
+                          <TableCell align="left">{phone}</TableCell>
                           <TableCell align="left">
                             <Label
                               variant="ghost"
-                              color={(status === 'banned' && 'error') || 'success'}
+                              color={(status === 'Loše' && 'error') || 'success'}
                             >
-                              {sentenceCase(status)}
+                              {/* {sentenceCase(status)} */}
+                              {status}
                             </Label>
                           </TableCell>
 
@@ -237,7 +244,7 @@ export default function User() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={USERLIST.length}
+            count={pacients.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

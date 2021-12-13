@@ -1445,6 +1445,11 @@
   "resolved" "https://registry.npmjs.org/@iconify/icons-bi/-/icons-bi-1.1.12.tgz"
   "version" "1.1.12"
 
+"@iconify/icons-clarity@^1.1.2":
+  "integrity" "sha512-znb3W2ubwNp9aWVEAoiETqoTgKn8Obp+5i2BtxQIcow8MEkgw5Y2JwfxUxIDTfYX7W4sreM9HYjBuffkkKoibg=="
+  "resolved" "https://registry.npmjs.org/@iconify/icons-clarity/-/icons-clarity-1.1.2.tgz"
+  "version" "1.1.2"
+
 "@iconify/icons-eva@^1.1.0":
   "integrity" "sha512-a2wCJw+6UebrsoJ2WhpHUcdr4PJljwk0tdu1GfpjzwVyiJBC7y6sc2h7as1npJPLwgMIc/q8YFJf5iFl7Ik3NA=="
   "resolved" "https://registry.npmjs.org/@iconify/icons-eva/-/icons-eva-1.1.0.tgz"
