@@ -175,9 +175,10 @@ export default function User() {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
                       const name = row.firstName + ' ' + row.lastName
-                      const avatarUrl = '/static/mock-images/avatars/avatar_11.jpg'
-                      const status = 'Loše'
-                      const { _id, birthDate, role, phone, gender } = row;
+                      const status = 'Nepregledan'
+                      const { _id, birthDate, role, phone, gender, pacientImage } = row;
+                      const formatedGender = gender === 'male' ? 'Muško' : 'Žensko'
+                      const avatarUrl = gender === 'female' ? '/static/mock-images/avatars/pacient_female_default.png' : '/static/mock-images/avatars/pacient_male_default.png'
                       const isItemSelected = selected.indexOf(name) !== -1;
 
                       return (
@@ -197,19 +198,19 @@ export default function User() {
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none">
                             <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar alt={name} src={avatarUrl} />
+                              <Avatar alt={name} src={!pacientImage ? avatarUrl : pacientImage} />
                               <Typography variant="subtitle2" noWrap>
                                 {name}
                               </Typography>
                             </Stack>
                           </TableCell>
                           <TableCell align="left">{new Date(birthDate).toLocaleDateString()}</TableCell>
-                          <TableCell align="left">{gender}</TableCell>
+                          <TableCell align="left">{formatedGender}</TableCell>
                           <TableCell align="left">{phone}</TableCell>
                           <TableCell align="left">
                             <Label
                               variant="ghost"
-                              color={(status === 'Loše' && 'error') || 'success'}
+                              color={(status === 'Nepregledan' && 'error') || 'success'}
                             >
                               {/* {sentenceCase(status)} */}
                               {status}

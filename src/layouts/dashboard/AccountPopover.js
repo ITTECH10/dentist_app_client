@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react';
 import { useRef, useState } from 'react';
+import { useEmployeeContext } from './../../context/EmployeeContext'
 import homeFill from '@iconify/icons-eva/home-fill';
 import personFill from '@iconify/icons-eva/person-fill';
 import settings2Fill from '@iconify/icons-eva/settings-2-fill';
@@ -37,6 +38,8 @@ const MENU_OPTIONS = [
 export default function AccountPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
+  const { logedInEmployee } = useEmployeeContext()
+  const { gender } = logedInEmployee
 
   const handleOpen = () => {
     setOpen(true);
@@ -67,7 +70,7 @@ export default function AccountPopover() {
           })
         }}
       >
-        <Avatar src={account.photoURL} alt="photoURL" />
+        <Avatar src={gender === 'male' ? account.maleDentistAvatar : account.femaleDentistAvatar} alt="dentist" />
       </IconButton>
 
       <MenuPopover

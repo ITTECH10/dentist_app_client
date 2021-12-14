@@ -11,7 +11,7 @@ const users = [...Array(6)].map((_, index) => ({
   name: faker.name.findName(),
   birthDate: faker.date.past(),
   isVerified: faker.datatype.boolean(),
-  status: sample(['lose', 'dobro']),
+  status: sample(['nepregledan', 'pregledan']),
   role: sample([
     'Asistent',
     'Direktor',

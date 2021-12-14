@@ -16,11 +16,13 @@ import CircularProgress from '@mui/material/CircularProgress';
 const genders = [
     {
         id: 1,
-        text: "Muško"
+        text: "Muško",
+        value: 'male'
     },
     {
         id: 2,
-        text: "Žensko"
+        text: "Žensko",
+        value: 'female'
     },
 ]
 
@@ -28,8 +30,9 @@ const initialFields = {
     firstName: '',
     lastName: '',
     birthDate: '',
-    gender: '',
+    gender: genders[0].value,
     phone: '',
+    pacientImage: ''
 }
 
 export default function AddPacientModal() {
@@ -38,6 +41,14 @@ export default function AddPacientModal() {
     const { setPacients, pacients } = usePacientContext()
     const { setGeneralAlertOptions } = useApp()
     const [fields, setFields] = React.useState(initialFields)
+
+    const formData = new FormData()
+    formData.append('firstName', fields.firstName)
+    formData.append('lastName', fields.lastName)
+    formData.append('birthDate', fields.birthDate)
+    formData.append('gender', fields.gender)
+    formData.append('phone', fields.phone)
+    formData.append('photo', fields.pacientImage)
 
     let addPacientTimeout
     React.useEffect(() => {
@@ -66,25 +77,42 @@ export default function AddPacientModal() {
         e.preventDefault();
         setBtnLoading(true)
 
-        axios.post('/pacients', { ...fields })
-            .then(res => {
-                if (res.status === 201) {
-                    const updatedPacients = [...pacients, { ...res.data.pacient }]
-                    addPacientTimeout = setTimeout(() => {
-                        setPacients(updatedPacients)
-                        setBtnLoading(false)
-                        setOpen(false)
-                        setGeneralAlertOptions({
-                            open: true,
-                            message: 'Uspješno ste dodali pacijenta!',
-                            severity: 'success',
-                            hideAfter: 5000
-                        })
-                    }, 2000)
-                }
-            }).catch(err => {
-                console.log(err)
-            })
+        axios({
+            method: 'POST',
+            data: formData,
+            headers: { "Content-Type": "multipart/form-data" },
+            url: '/pacients'
+        }).then(res => {
+            if (res.status === 201) {
+                const updatedPacients = [...pacients, { ...res.data.pacient }]
+                addPacientTimeout = setTimeout(() => {
+                    setPacients(updatedPacients)
+                    setBtnLoading(false)
+                    setOpen(false)
+                    setGeneralAlertOptions({
+                        open: true,
+                        message: 'Uspješno ste dodali pacijenta!',
+                        severity: 'success',
+                        hideAfter: 5000
+                    })
+                }, 2000)
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+
+    const openUploadHandler = () => {
+        const input = document.getElementById('photo-input-ref')
+        input.click()
+    }
+
+    const handleImageChange = (e) => {
+        const photo = e.target.files[0]
+        setFields({
+            ...fields,
+            pacientImage: photo
+        })
     }
 
     return (
@@ -101,6 +129,20 @@ export default function AddPacientModal() {
                         component="form"
                         onSubmit={handleSubmit}
                     >
+                        <input
+                            name="photo"
+                            id="photo-input-ref"
+                            type="file"
+                            hidden
+                            onChange={handleImageChange}
+                        />
+                        <Button
+                            variant="contained"
+                            sx={{ mt: 1 }}
+                            onClick={openUploadHandler}
+                        >
+                            {fields.pacientImage !== '' ? 'Promjeni sliku' : 'Dodaj sliku'}
+                        </Button>
                         <TextField
                             name="firstName"
                             autoFocus
@@ -148,7 +190,7 @@ export default function AddPacientModal() {
                             }}
                         >
                             {genders.map((option, idx) => (
-                                <option key={option.id} value={option.text}>
+                                <option key={option.id} value={option.value}>
                                     {option.text}
                                 </option>
                             ))}
