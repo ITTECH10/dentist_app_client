@@ -1,5 +1,4 @@
 import React from 'react';
-import { useApp } from './AppContext'
 import axios from 'axios';
 
 const PacientContext = React.createContext()
@@ -9,7 +8,6 @@ export const usePacientContext = () => {
 }
 
 const PacientContextProvider = ({ children }) => {
-    const { setAppLoading } = useApp()
     const [pacients, setPacients] = React.useState([])
     const [appointments, setAppointments] = React.useState([])
 
@@ -17,7 +15,6 @@ const PacientContextProvider = ({ children }) => {
         axios('/pacients').then(res => {
             if (res.status === 200) {
                 setPacients(res.data.pacients)
-                setAppLoading(false)
             }
         }).catch(err => {
             console.log(err)

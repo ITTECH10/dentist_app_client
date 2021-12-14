@@ -1,4 +1,6 @@
 import React from 'react';
+import { useEmployeeContext } from './../context/EmployeeContext'
+
 // material
 import { Box, Grid, Container, Typography } from '@mui/material';
 // components
@@ -20,15 +22,17 @@ import {
 
 import ActionButton from '../components/_reusable/ActionButton';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
-import { actions } from './../utils/DataProviders/ActionButton'
+import { actions, nonAdminActions } from '../utils/DataProviders/ActionButton'
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
+  const { isSuperAdmin } = useEmployeeContext()
+
   return (
     <Page title="Dashboard | Minimal-UI">
       <Container maxWidth="xl">
         <ActionButton
-          actions={actions}
+          actions={isSuperAdmin ? actions : nonAdminActions}
           actionIcon={<SpeedDialIcon />}
         />
         <Box sx={{ pb: 5 }}>

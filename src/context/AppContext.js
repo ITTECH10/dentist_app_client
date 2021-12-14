@@ -8,7 +8,7 @@ export const useApp = () => {
 
 const AppContextProvider = ({ children }) => {
     const [authenticated, setAuthenticated] = React.useState(false)
-    const [appLoading, setAppLoading] = React.useState(true)
+    const [appLoading, setAppLoading] = React.useState(false)
     const [generalAlertOptions, setGeneralAlertOptions] = React.useState({
         open: false,
         message: '',

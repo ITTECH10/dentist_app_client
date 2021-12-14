@@ -10,6 +10,7 @@ import { BaseOptionChartStyle } from './components/charts/BaseOptionChart';
 import jwtDecode from 'jwt-decode'
 import { useApp } from './context/AppContext'
 import { usePacientContext } from './context/PacientContext'
+import { useEmployeeContext } from './context/EmployeeContext'
 import useLocalStorage from './hooks/useLocalStorage'
 import Loader from './components/Loader/Loader'
 
@@ -17,10 +18,19 @@ import Loader from './components/Loader/Loader'
 
 export default function App() {
   const [token, setToken] = useLocalStorage('token', '')
-  const { setAuthenticated, appLoading } = useApp()
+  const { setAuthenticated, appLoading, authenticated } = useApp()
   const { getAllPacients } = usePacientContext()
+  const { getLogedInEmployee } = useEmployeeContext()
 
+  // ONLY RUN IF WE ARE AUTHENTICATED, AND WE CAN ONLY
+  // BECOME AUTHENTICATED WITH A VALID TOKEN
+  // SO THIS IS THE BEST APPROACH
   useEffect(() => {
+    if (authenticated) {
+      getAllPacients()
+      getLogedInEmployee()
+    }
+
     if (token) {
       const decoded = jwtDecode(token)
 
@@ -28,12 +38,10 @@ export default function App() {
         // !EXPIRED
         console.log('loging out...')
       } else {
-        // store.dispatch({type: SET_AUTHENTICATED})
         setAuthenticated(true)
-        getAllPacients()
       }
     }
-  }, [token, setAuthenticated])
+  }, [token, setAuthenticated, getAllPacients, getLogedInEmployee, authenticated])
 
   return (
     !appLoading ?
