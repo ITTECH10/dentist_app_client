@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { Icon } from '@iconify/react';
@@ -25,7 +25,7 @@ import { LoadingButton } from '@mui/lab';
 export default function LoginForm() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
-  const { setAuthenticated } = useApp()
+  const { setAuthenticated, setToken } = useApp()
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email('Molimo vas unesite validnu E-mail adresu.').required('Molimo vas unesite vaš E-mail.'),
@@ -45,7 +45,8 @@ export default function LoginForm() {
           if (res.status === 200) {
             setAuthenticated(true);
             navigate('/dashboard/app')
-            localStorage.setItem('token', JSON.stringify(res.data.token))
+            // localStorage.setItem('token', JSON.stringify(res.data.token))
+            setToken(res.data.token)
           }
         }).catch(err => {
           console.log(err)

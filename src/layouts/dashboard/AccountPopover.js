@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react';
 import { useRef, useState } from 'react';
 import { useEmployeeContext } from './../../context/EmployeeContext'
+import { useApp } from './../../context/AppContext'
 import homeFill from '@iconify/icons-eva/home-fill';
 import personFill from '@iconify/icons-eva/person-fill';
 import settings2Fill from '@iconify/icons-eva/settings-2-fill';
@@ -39,7 +40,10 @@ export default function AccountPopover() {
   const anchorRef = useRef(null);
   const [open, setOpen] = useState(false);
   const { logedInEmployee } = useEmployeeContext()
-  const { gender } = logedInEmployee
+  const { logout } = useApp()
+  const { gender, firstName, lastName, email, employeeImage } = logedInEmployee
+
+  const defaultAvatar = gender === 'male' ? account.maleDentistAvatar : account.femaleDentistAvatar
 
   const handleOpen = () => {
     setOpen(true);
@@ -70,7 +74,7 @@ export default function AccountPopover() {
           })
         }}
       >
-        <Avatar src={gender === 'male' ? account.maleDentistAvatar : account.femaleDentistAvatar} alt="dentist" />
+        <Avatar src={employeeImage ? employeeImage : defaultAvatar} alt="dentist" />
       </IconButton>
 
       <MenuPopover
@@ -81,10 +85,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle1" noWrap>
-            {account.displayName}
+            {`${firstName} ${lastName}`}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
+            {email}
           </Typography>
         </Box>
 
@@ -112,7 +116,7 @@ export default function AccountPopover() {
           </MenuItem>
         ))}
 
-        <Box sx={{ p: 2, pt: 1.5 }}>
+        <Box sx={{ p: 2, pt: 1.5 }} onClick={logout}>
           <Button fullWidth color="inherit" variant="outlined">
             Odjava
           </Button>

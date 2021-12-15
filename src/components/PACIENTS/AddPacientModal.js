@@ -55,7 +55,7 @@ export default function AddPacientModal() {
         return () => {
             clearTimeout(addPacientTimeout)
         }
-    }, [])
+    }, [addPacientTimeout])
 
     const handleClickOpen = () => {
         setOpen(true);

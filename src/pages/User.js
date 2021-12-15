@@ -175,8 +175,8 @@ export default function User() {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
                       const name = row.firstName + ' ' + row.lastName
-                      const status = 'Nepregledan'
-                      const { _id, birthDate, role, phone, gender, pacientImage } = row;
+                      const { _id, birthDate, role, phone, gender, pacientImage, checked } = row;
+                      const status = checked ? 'Pregledan' : 'Nepregledan'
                       const formatedGender = gender === 'male' ? 'Muško' : 'Žensko'
                       const avatarUrl = gender === 'female' ? '/static/mock-images/avatars/pacient_female_default.png' : '/static/mock-images/avatars/pacient_male_default.png'
                       const isItemSelected = selected.indexOf(name) !== -1;

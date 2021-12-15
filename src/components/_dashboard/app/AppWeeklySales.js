@@ -35,8 +35,6 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const TOTAL = 83;
-
 export default function AppWeeklySales() {
   const { pacients } = usePacientContext()
 

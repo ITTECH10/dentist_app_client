@@ -4,7 +4,7 @@ import { useEmployeeContext } from './../../context/EmployeeContext'
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 // material
 import { styled } from '@mui/material/styles';
-import { Box, Link, Button, Drawer, Typography, Avatar, Stack } from '@mui/material';
+import { Box, Link, Drawer, Typography, Avatar } from '@mui/material';
 // components
 import Logo from '../../components/Logo';
 import Scrollbar from '../../components/Scrollbar';
@@ -43,7 +43,12 @@ DashboardSidebar.propTypes = {
 export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const { pathname } = useLocation();
   const { logedInEmployee } = useEmployeeContext()
-  const { gender } = logedInEmployee
+  const { gender, firstName, lastName, role, employeeImage } = logedInEmployee
+
+  const defaultAvatar = gender === 'male' ? account.maleDentistAvatar : account.femaleDentistAvatar
+
+  const formatedRole = role === 'assistant' ? 'Asistent'
+    : role === 'director' ? 'Direktor' : role === 'deputy' ? 'Zamjenik' : ''
 
   useEffect(() => {
     if (isOpenSidebar) {
@@ -68,13 +73,13 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       <Box sx={{ mb: 5, mx: 2.5 }}>
         <Link underline="none" component={RouterLink} to="#">
           <AccountStyle>
-            <Avatar src={gender === 'male' ? account.maleDentistAvatar : account.femaleDentistAvatar} alt="photoURL" />
+            <Avatar src={employeeImage ? employeeImage : defaultAvatar} alt="dentist" />
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                {account.displayName}
+                {`${firstName} ${lastName}`}
               </Typography>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                {account.role}
+                {formatedRole}
               </Typography>
             </Box>
           </AccountStyle>

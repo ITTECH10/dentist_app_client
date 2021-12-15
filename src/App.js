@@ -11,14 +11,12 @@ import jwtDecode from 'jwt-decode'
 import { useApp } from './context/AppContext'
 import { usePacientContext } from './context/PacientContext'
 import { useEmployeeContext } from './context/EmployeeContext'
-import useLocalStorage from './hooks/useLocalStorage'
 import Loader from './components/Loader/Loader'
 
 // ----------------------------------------------------------------------
 
 export default function App() {
-  const [token, setToken] = useLocalStorage('token', '')
-  const { setAuthenticated, appLoading, authenticated } = useApp()
+  const { setAuthenticated, appLoading, token } = useApp()
   const { getAllPacients } = usePacientContext()
   const { getLogedInEmployee } = useEmployeeContext()
 
@@ -26,7 +24,7 @@ export default function App() {
   // BECOME AUTHENTICATED WITH A VALID TOKEN
   // SO THIS IS THE BEST APPROACH
   useEffect(() => {
-    if (authenticated) {
+    if (token) {
       getAllPacients()
       getLogedInEmployee()
     }
@@ -41,7 +39,7 @@ export default function App() {
         setAuthenticated(true)
       }
     }
-  }, [token, setAuthenticated, getAllPacients, getLogedInEmployee, authenticated])
+  }, [token, setAuthenticated, getAllPacients, getLogedInEmployee])
 
   return (
     !appLoading ?

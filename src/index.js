@@ -22,17 +22,17 @@ axios.defaults.baseURL = 'http://localhost:8000/api/v1'
 // ----------------------------------------------------------------------
 
 ReactDOM.render(
-  <AppContextProvider>
-    <EmployeeContextProvider>
-      <PacientContextProvider>
-        <HelmetProvider>
-          <BrowserRouter>
+  <BrowserRouter>
+    <AppContextProvider>
+      <EmployeeContextProvider>
+        <PacientContextProvider>
+          <HelmetProvider>
             <App />
-          </BrowserRouter>
-        </HelmetProvider>
-      </PacientContextProvider>
-    </EmployeeContextProvider>
-  </AppContextProvider>,
+          </HelmetProvider>
+        </PacientContextProvider>
+      </EmployeeContextProvider>
+    </AppContextProvider>,
+  </BrowserRouter>,
   document.getElementById('root')
 );
 

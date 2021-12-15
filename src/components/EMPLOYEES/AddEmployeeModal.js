@@ -14,7 +14,7 @@ import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import KeyIcon from '@mui/icons-material/Key';
-import { hasPermission, actions } from './../../utils/DataProviders/ROLES/permissions'
+// import { hasPermission, actions } from './../../utils/DataProviders/ROLES/permissions'
 
 import { generatePassword } from './../../utils/generatePassword'
 
@@ -39,11 +39,13 @@ const workRoles = [
 const genders = [
     {
         id: 1,
-        text: "Muško"
+        text: "Muško",
+        value: 'male'
     },
     {
         id: 2,
-        text: "Žensko"
+        text: "Žensko",
+        value: 'female'
     },
 ]
 
@@ -51,11 +53,12 @@ const initialFields = {
     firstName: '',
     lastName: '',
     birthDate: '',
-    gender: genders[0].text,
+    gender: genders[0].value,
     role: workRoles[0].value,
     phone: '',
     email: '',
-    password: ''
+    password: '',
+    employeeImage: ''
 }
 
 export default function AddEmployeeModal() {
@@ -63,16 +66,27 @@ export default function AddEmployeeModal() {
     const [passwordInputType, setPasswordInputType] = React.useState('password')
     const [btnLoading, setBtnLoading] = React.useState(false)
     const { setGeneralAlertOptions } = useApp()
-    const { employees, setEmployees, logedInEmployee } = useEmployeeContext()
+    const { employees, setEmployees } = useEmployeeContext()
     const [fields, setFields] = React.useState(initialFields)
-    const ADD_EMPLOYEE_PERMISSION = hasPermission(logedInEmployee, actions.ADD_EMPLOYEE)
+
+    const formData = new FormData()
+    formData.append('firstName', fields.firstName)
+    formData.append('lastName', fields.lastName)
+    formData.append('birthDate', fields.birthDate)
+    formData.append('gender', fields.gender)
+    formData.append('role', fields.role)
+    formData.append('phone', fields.phone)
+    formData.append('email', fields.email)
+    formData.append('password', fields.password)
+    formData.append('photo', fields.employeeImage)
+    // const ADD_EMPLOYEE_PERMISSION = hasPermission(logedInEmployee, actions.ADD_EMPLOYEE)
 
     let addEmployeeTimeout
     React.useEffect(() => {
         return () => {
             clearTimeout(addEmployeeTimeout)
         }
-    }, [])
+    }, [addEmployeeTimeout])
 
 
     const handleClickOpen = () => {
@@ -95,30 +109,34 @@ export default function AddEmployeeModal() {
         e.preventDefault()
         setBtnLoading(true)
 
-        axios.post('/employees/signup', { ...fields })
-            .then(res => {
-                if (res.status === 201) {
-                    const updatedEmployees = [...employees, { ...res.data.newEmployee }]
+        axios({
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            url: '/employees/signup',
+            data: formData
+        }).then(res => {
+            if (res.status === 201) {
+                const updatedEmployees = [...employees, { ...res.data.newEmployee }]
 
-                    addEmployeeTimeout = setTimeout((() => {
-                        setEmployees(updatedEmployees)
-                        setOpen(false)
-                        setBtnLoading(false)
-                        setGeneralAlertOptions({
-                            open: true,
-                            message: `Uspješno ste dodali zaposlenika! 
+                addEmployeeTimeout = setTimeout((() => {
+                    setEmployees(updatedEmployees)
+                    setOpen(false)
+                    setBtnLoading(false)
+                    setGeneralAlertOptions({
+                        open: true,
+                        message: `Uspješno ste dodali zaposlenika! 
                             Molimo vas proslijedite lozinku i email novom zaposleniku!
                             Email: ${fields.email}
                             Lozinka: ${fields.password}
                             `,
-                            severity: 'info',
-                            hideAfter: 60000
-                        })
-                    }), 2000)
-                }
-            }).catch(err => {
-                console.log(err)
-            })
+                        severity: 'info',
+                        hideAfter: 60000
+                    })
+                }), 2000)
+            }
+        }).catch(err => {
+            console.log(err)
+        })
     }
 
     const passwordGenerationHandler = () => {
@@ -127,6 +145,19 @@ export default function AddEmployeeModal() {
         setFields({
             ...fields,
             password: generatedPassword
+        })
+    }
+
+    const handleUploadBoxOpening = () => {
+        const input = document.getElementById('upload-employee-photo')
+        input.click()
+    }
+
+    const handleImageSelection = (e) => {
+        const photo = e.target.files[0]
+        setFields({
+            ...fields,
+            employeeImage: photo
         })
     }
 
@@ -144,6 +175,20 @@ export default function AddEmployeeModal() {
                         component="form"
                         onSubmit={handleSubmit}
                     >
+                        <input
+                            id="upload-employee-photo"
+                            name="employeeImage"
+                            type="file"
+                            onChange={handleImageSelection}
+                            hidden
+                        />
+                        <Button
+                            variant="contained"
+                            sx={{ mt: 2 }}
+                            onClick={handleUploadBoxOpening}
+                        >
+                            {fields.employeeImage !== '' ? 'Promjeni sliku' : 'Dodaj sliku'}
+                        </Button>
                         <TextField
                             autoFocus
                             margin="dense"
@@ -191,7 +236,7 @@ export default function AddEmployeeModal() {
                             }}
                         >
                             {genders.map((option) => (
-                                <option key={option.id} value={option.text}>
+                                <option key={option.id} value={option.value}>
                                     {option.text}
                                 </option>
                             ))}

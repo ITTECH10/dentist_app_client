@@ -10,8 +10,7 @@ export const useEmployeeContext = () => {
 }
 
 const EmployeeContextProvider = ({ children }) => {
-    // CONSIDER LATER LOGIC
-    const { setAuthenticated, setAppLoading } = useApp()
+    const { setAppLoading } = useApp()
     ///////////////////////////
 
     const [employees, setEmployees] = React.useState([])
@@ -28,7 +27,7 @@ const EmployeeContextProvider = ({ children }) => {
                     setIsSuperAdmin(IS_SUPER_ADMIN(res.data.employee, actions.IS_SUPER_ADMIN))
                 }
             }).catch(err => console.log(err))
-    }, [])
+    }, [setAppLoading])
 
     const value = {
         employees,
