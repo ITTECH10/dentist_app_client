@@ -29,10 +29,10 @@ import Scrollbar from '../components/Scrollbar';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar } from '../components/_dashboard/user';
 import TableMoreMenu from './../components/_dashboard/user/TableMoreMenu'
+import DeletePacientDialog from './../components/PACIENTS/DeletePacientDialog'
 
 //
 import USERLIST from '../_mocks_/user';
-import { moreMenuItems } from './../utils/DataProviders/TableMoreMenu'
 
 // ----------------------------------------------------------------------
 
@@ -236,7 +236,9 @@ export default function User() {
                           </TableCell>
 
                           <TableCell align="right">
-                            <TableMoreMenu menuItemsArr={moreMenuItems} />
+                            <TableMoreMenu>
+                              <DeletePacientDialog pacientId={_id} />
+                            </TableMoreMenu>
                           </TableCell>
                         </TableRow>
                       );

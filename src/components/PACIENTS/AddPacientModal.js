@@ -97,7 +97,7 @@ export default function AddPacientModal() {
                         severity: 'success',
                         hideAfter: 5000
                     })
-                }, 2000)
+                }, 1000)
             }
         }).catch(err => {
             console.log(err)

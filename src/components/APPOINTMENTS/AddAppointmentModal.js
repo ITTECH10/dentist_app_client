@@ -77,7 +77,7 @@ export default function AddAppointmentModal() {
                             message: 'Uspješno ste dodali termin!',
                             hideAfter: 5000
                         })
-                    }, 2000)
+                    }, 1000)
                 }
             }).catch(err => {
                 console.log(err)
