@@ -10,8 +10,13 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import CircularProgress from '@mui/material/CircularProgress';
+import editFill from '@iconify/icons-eva/edit-fill';
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
+import MenuItem from '@mui/material/MenuItem'
+
+import { Icon } from '@iconify/react';
 
 const genders = [
     {
@@ -36,7 +41,7 @@ const initialFields = {
     pacientImage: ''
 }
 
-export default function AddPacientModal() {
+export default function EditPacientDialog({ pacientId }) {
     const [open, setOpen] = React.useState(false)
     const [btnLoading, setBtnLoading] = React.useState(false)
     const { setPacients, pacients } = usePacientContext()
@@ -59,8 +64,18 @@ export default function AddPacientModal() {
         }
     }, [addPacientTimeout])
 
+    // STARTING WITH SERVER APPROACH // NICE TO CONSIDER CLIENT APPROACH // OR OPPOSITE
+    // ALREADY CONSIDERING TO TAKE THIS APPROACH
     const handleClickOpen = () => {
         setOpen(true);
+        axios(`/pacients/${pacientId}`)
+            .then(res => {
+                if (res.status === 200) {
+                    setFields(res.data.pacient)
+                }
+            }).catch(err => {
+                console.log(err)
+            })
     };
 
     const handleClose = () => {
@@ -80,20 +95,31 @@ export default function AddPacientModal() {
         setBtnLoading(true)
 
         axios({
-            method: 'POST',
+            method: 'PUT',
             data: formData,
             headers: { "Content-Type": "multipart/form-data" },
-            url: '/pacients'
+            url: `/pacients/${pacientId}`
         }).then(res => {
-            if (res.status === 201) {
-                const updatedPacients = [...pacients, { ...res.data.pacient }]
+            if (res.status === 200) {
+                const updatedPacients = [...pacients]
+                const updatingPacientIndex = updatedPacients.findIndex(pacient => pacient._id === pacientId)
+                const foundPacient = updatedPacients[updatingPacientIndex]
+
+                foundPacient.firstName = res.data.updatedPacient.firstName
+                foundPacient.lastName = res.data.updatedPacient.lastName
+                foundPacient.gender = res.data.updatedPacient.gender
+                foundPacient.address = res.data.updatedPacient.address
+                foundPacient.birthDate = res.data.updatedPacient.birthDate
+                foundPacient.pacientImage = res.data.updatedPacient.pacientImage
+                foundPacient.phone = res.data.updatedPacient.phone
+
                 addPacientTimeout = setTimeout(() => {
                     setPacients(updatedPacients)
                     setBtnLoading(false)
                     setOpen(false)
                     setGeneralAlertOptions({
                         open: true,
-                        message: 'Uspješno ste dodali pacijenta!',
+                        message: 'Uspješno ste izmjenili informacije o pacijentu!',
                         severity: 'success',
                         hideAfter: 5000
                     })
@@ -119,13 +145,18 @@ export default function AddPacientModal() {
 
     return (
         <>
-            <PersonAddIcon onClick={handleClickOpen} />
+            <MenuItem sx={{ color: 'text.secondary' }} onClick={handleClickOpen}>
+                <ListItemIcon>
+                    <Icon icon={editFill} width={24} height={24} />
+                </ListItemIcon>
+                <ListItemText primary="Izmjeni" primaryTypographyProps={{ variant: 'body2' }} />
+            </MenuItem>
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Novi Pacijent</DialogTitle>
+                <DialogTitle>Izmjena informacija o pacijentu</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Da biste dodali novog pacijenta, molimo vas popunite informacije
-                        ispod.
+                        Da biste izmjenili informacije povezane sa ovim pacijentom,
+                        molimo vas ispunite formu ispod.
                     </DialogContentText>
                     <Box
                         component="form"
@@ -143,15 +174,16 @@ export default function AddPacientModal() {
                             sx={{ mt: 1 }}
                             onClick={openUploadHandler}
                         >
-                            {fields.pacientImage !== '' ? 'Promjeni sliku' : 'Dodaj sliku'}
+                            {/* {fields.pacientImage !== '' ? 'Slika je dodana' : 'Nova slika'} */}
+                            Nova slika
                         </Button>
                         <TextField
                             name="firstName"
-                            required
                             autoFocus
                             margin="dense"
                             id="firstName"
                             label="Ime"
+                            placeholder={fields.firstName}
                             fullWidth
                             variant="standard"
                             onChange={handleChange}
@@ -159,9 +191,9 @@ export default function AddPacientModal() {
                         <TextField
                             margin="dense"
                             name="lastName"
-                            required
                             id="lastName"
                             label="Prezime"
+                            placeholder={fields.lastName}
                             fullWidth
                             variant="standard"
                             onChange={handleChange}
@@ -169,8 +201,8 @@ export default function AddPacientModal() {
                         <TextField
                             margin="dense"
                             name="address"
-                            required
                             id="address"
+                            placeholder={fields.address}
                             label="Adresa"
                             fullWidth
                             variant="standard"
@@ -180,7 +212,6 @@ export default function AddPacientModal() {
                             id="birthDate"
                             label="Datum rođenja"
                             name="birthDate"
-                            required
                             type="date"
                             sx={{ mt: 2 }}
                             fullWidth
@@ -192,7 +223,6 @@ export default function AddPacientModal() {
                         />
                         <TextField
                             name="gender"
-                            required
                             id="gender"
                             select
                             label="Spol"
@@ -212,10 +242,10 @@ export default function AddPacientModal() {
                         </TextField>
                         <TextField
                             name="phone"
-                            required
                             margin="dense"
                             id="phone"
                             label="Telefon"
+                            placeholder={fields.phone}
                             type="tel"
                             fullWidth
                             variant="standard"
@@ -227,7 +257,7 @@ export default function AddPacientModal() {
                                 variant="contained"
                                 color="primary"
                                 type="submit"
-                                disabled={Object.values(fields).some(field => field === '')}
+                            // disabled={Object.values(fields).some(field => field === '')}
                             >
                                 {btnLoading ? <CircularProgress style={{ color: '#fff' }} size={24} /> : 'Gotovo'}
                             </Button>

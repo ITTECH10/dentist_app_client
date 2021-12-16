@@ -20,7 +20,6 @@ import Box from '@mui/material/Box'
 //other
 import { Icon } from '@iconify/react';
 import trash2Outline from '@iconify/icons-eva/trash-2-outline';
-import editFill from '@iconify/icons-eva/edit-fill';
 
 export default function DeletePacientDialog({ pacientId }) {
     const [open, setOpen] = React.useState(false);
@@ -90,8 +89,8 @@ export default function DeletePacientDialog({ pacientId }) {
                         onSubmit={handleSubmit}
                     >
                         <DialogContentText id="alert-dialog-description">
-                            Upozorenje! Nakon brisanja ovog pacijenta nema povratka nazad!
-                            Da li ste sigurni da želite obrisati ovog pacijenta?
+                            Upozorenje! Nakon brisanja ovog pacijenta svi podaci povezani sa njim
+                            bit će obrisani.
                         </DialogContentText>
                         <DialogActions>
                             <Button variant="contained" color="error" onClick={handleClose}>Nazad</Button>

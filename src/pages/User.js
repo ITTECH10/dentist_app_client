@@ -20,8 +20,12 @@ import {
   Container,
   Typography,
   TableContainer,
-  TablePagination
+  TablePagination,
+  ListItemIcon,
+  ListItemText,
+  MenuItem
 } from '@mui/material';
+
 // components
 import Page from '../components/Page';
 import Label from '../components/Label';
@@ -30,6 +34,7 @@ import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar } from '../components/_dashboard/user';
 import TableMoreMenu from './../components/_dashboard/user/TableMoreMenu'
 import DeletePacientDialog from './../components/PACIENTS/DeletePacientDialog'
+import EditPacientDialog from './../components/PACIENTS/EditPacientDialog'
 
 //
 import USERLIST from '../_mocks_/user';
@@ -238,6 +243,7 @@ export default function User() {
                           <TableCell align="right">
                             <TableMoreMenu>
                               <DeletePacientDialog pacientId={_id} />
+                              <EditPacientDialog pacientId={_id} />
                             </TableMoreMenu>
                           </TableCell>
                         </TableRow>
