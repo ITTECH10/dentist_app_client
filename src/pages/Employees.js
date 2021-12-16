@@ -25,9 +25,12 @@ import Page from '../components/Page';
 import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
 import SearchNotFound from '../components/SearchNotFound';
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../components/_dashboard/user';
+import { UserListHead, UserListToolbar } from '../components/_dashboard/user';
+import TableMoreMenu from './../components/_dashboard/user/TableMoreMenu'
+
 //
 import USERLIST from '../_mocks_/user';
+import { moreMenuItems } from './../utils/DataProviders/TableMoreMenu'
 
 // ----------------------------------------------------------------------
 
@@ -211,7 +214,7 @@ export default function User() {
                                                     </TableCell>
 
                                                     <TableCell align="right">
-                                                        <UserMoreMenu />
+                                                        <TableMoreMenu menuItemsArr={moreMenuItems} />
                                                     </TableCell>
                                                 </TableRow>
                                             );

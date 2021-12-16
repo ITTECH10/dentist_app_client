@@ -23,13 +23,15 @@ import {
 import ActionButton from '../components/_reusable/ActionButton';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 import { actions, nonAdminActions } from '../utils/DataProviders/ActionButton'
+import { actions as permissionActions, hasPermission } from './../utils/DataProviders/ROLES/permissions'
 // ----------------------------------------------------------------------
 
 export default function DashboardApp() {
-  const { isSuperAdmin } = useEmployeeContext()
+  const { isSuperAdmin, logedInEmployee } = useEmployeeContext()
+  const dashboardBoxVisible = hasPermission(logedInEmployee, permissionActions.MAIN_ROLE_UI_VISIBILITY)
 
   return (
-    <Page title="Dashboard | Minimal-UI">
+    <Page title="Radna Površina">
       <Container maxWidth="xl">
         <ActionButton
           actions={isSuperAdmin ? actions : nonAdminActions}
@@ -42,12 +44,14 @@ export default function DashboardApp() {
           <Grid item xs={12} sm={6} md={3}>
             <AppWeeklySales />
           </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <AppNewUsers />
-          </Grid>
-          <Grid item xs={12} sm={6} md={3}>
-            <AppItemOrders />
-          </Grid>
+          {dashboardBoxVisible &&
+            <Grid item xs={12} sm={6} md={3}>
+              <AppNewUsers />
+            </Grid>}
+          {dashboardBoxVisible &&
+            <Grid item xs={12} sm={6} md={3}>
+              <AppItemOrders />
+            </Grid>}
           <Grid item xs={12} sm={6} md={3}>
             <AppBugReports />
           </Grid>

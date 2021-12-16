@@ -11,7 +11,8 @@ import Scrollbar from '../../components/Scrollbar';
 import NavSection from '../../components/NavSection';
 import { MHidden } from '../../components/@material-extend';
 //
-import sidebarConfig from './SidebarConfig';
+import { hasPermission, actions } from './../../utils/DataProviders/ROLES/permissions'
+import { mainRolesSidebarConfig, subRolesSidebarConfig } from './SidebarConfig';
 import account from '../../_mocks_/account';
 
 // ----------------------------------------------------------------------
@@ -45,6 +46,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const { logedInEmployee } = useEmployeeContext()
   const { gender, firstName, lastName, role, employeeImage } = logedInEmployee
 
+  const entireSidebarVisible = hasPermission(logedInEmployee, actions.MAIN_ROLE_UI_VISIBILITY)
   const defaultAvatar = gender === 'male' ? account.maleDentistAvatar : account.femaleDentistAvatar
 
   const formatedRole = role === 'assistant' ? 'Asistent'
@@ -86,7 +88,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
         </Link>
       </Box>
 
-      <NavSection navConfig={sidebarConfig} />
+      <NavSection navConfig={entireSidebarVisible ? mainRolesSidebarConfig : subRolesSidebarConfig} />
     </Scrollbar>
   );
 

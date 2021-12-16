@@ -18,7 +18,7 @@ import Loader from './components/Loader/Loader'
 export default function App() {
   const { setAuthenticated, appLoading, token } = useApp()
   const { getAllPacients } = usePacientContext()
-  const { getLogedInEmployee } = useEmployeeContext()
+  const { getLogedInEmployee, getAllEmployees } = useEmployeeContext()
 
   // ONLY RUN IF WE ARE AUTHENTICATED, AND WE CAN ONLY
   // BECOME AUTHENTICATED WITH A VALID TOKEN
@@ -27,6 +27,7 @@ export default function App() {
     if (token) {
       getAllPacients()
       getLogedInEmployee()
+      getAllEmployees()
     }
 
     if (token) {

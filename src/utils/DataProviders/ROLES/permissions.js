@@ -5,6 +5,7 @@ const mappings = new Map();
 mappings.set(actions.IS_SUPER_ADMIN, [roles.DIRECTOR])
 
 mappings.set(actions.ADD_EMPLOYEE, [roles.DIRECTOR]);
+mappings.set(actions.MAIN_ROLE_UI_VISIBILITY, [roles.DIRECTOR, roles.DEPUTY]);
 
 export const hasPermission = (employee, action) => {
     if (!employee?.role) {

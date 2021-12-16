@@ -17,6 +17,17 @@ const EmployeeContextProvider = ({ children }) => {
     const [logedInEmployee, setLogedInEmployee] = React.useState({})
     const [isSuperAdmin, setIsSuperAdmin] = React.useState(false)
 
+    const getAllEmployees = React.useCallback(() => {
+        axios('/employees')
+            .then(res => {
+                if (res.status === 200) {
+                    setEmployees(res.data.employees)
+                }
+            }).catch(err => {
+                console.log(err)
+            })
+    }, [])
+
     const getLogedInEmployee = React.useCallback(() => {
         setAppLoading(true)
         axios('/employees/me')
@@ -32,6 +43,7 @@ const EmployeeContextProvider = ({ children }) => {
     const value = {
         employees,
         setEmployees,
+        getAllEmployees,
         logedInEmployee,
         getLogedInEmployee,
         isSuperAdmin

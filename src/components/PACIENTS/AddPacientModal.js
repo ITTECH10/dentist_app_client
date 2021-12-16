@@ -30,6 +30,7 @@ const initialFields = {
     firstName: '',
     lastName: '',
     birthDate: '',
+    address: '',
     gender: genders[0].value,
     phone: '',
     pacientImage: ''
@@ -46,6 +47,7 @@ export default function AddPacientModal() {
     formData.append('firstName', fields.firstName)
     formData.append('lastName', fields.lastName)
     formData.append('birthDate', fields.birthDate)
+    formData.append('address', fields.address)
     formData.append('gender', fields.gender)
     formData.append('phone', fields.phone)
     formData.append('photo', fields.pacientImage)
@@ -158,6 +160,15 @@ export default function AddPacientModal() {
                             name="lastName"
                             id="lastName"
                             label="Prezime"
+                            fullWidth
+                            variant="standard"
+                            onChange={handleChange}
+                        />
+                        <TextField
+                            margin="dense"
+                            name="address"
+                            id="address"
+                            label="Adresa"
                             fullWidth
                             variant="standard"
                             onChange={handleChange}

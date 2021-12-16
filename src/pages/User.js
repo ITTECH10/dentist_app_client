@@ -1,6 +1,7 @@
+import { useNavigate } from 'react-router-dom'
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
-import { sentenceCase } from 'change-case';
+// import { sentenceCase } from 'change-case';
 import { useState } from 'react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import { Link as RouterLink } from 'react-router-dom';
@@ -26,9 +27,12 @@ import Page from '../components/Page';
 import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
 import SearchNotFound from '../components/SearchNotFound';
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../components/_dashboard/user';
+import { UserListHead, UserListToolbar } from '../components/_dashboard/user';
+import TableMoreMenu from './../components/_dashboard/user/TableMoreMenu'
+
 //
 import USERLIST from '../_mocks_/user';
+import { moreMenuItems } from './../utils/DataProviders/TableMoreMenu'
 
 // ----------------------------------------------------------------------
 
@@ -73,13 +77,24 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function User() {
-  const { pacients } = usePacientContext()
+  const navigate = useNavigate()
+  const { pacients, getSelectedPacient, selectedPacient } = usePacientContext()
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const handlePacientNavigation = (id) => {
+    const { _id: selectedPacientId } = selectedPacient
+
+    if (selectedPacientId !== id) {
+      getSelectedPacient(id)
+    }
+
+    navigate(`/dashboard/pacients/${id}`)
+  }
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -184,19 +199,22 @@ export default function User() {
                       return (
                         <TableRow
                           hover
+                          sx={{ cursor: 'pointer' }}
                           key={_id}
                           tabIndex={-1}
                           role="checkbox"
                           selected={isItemSelected}
                           aria-checked={isItemSelected}
                         >
-                          <TableCell padding="checkbox">
+                          <TableCell
+                            padding="checkbox"
+                          >
                             <Checkbox
                               checked={isItemSelected}
                               onChange={(event) => handleClick(event, name)}
                             />
                           </TableCell>
-                          <TableCell component="th" scope="row" padding="none">
+                          <TableCell component="th" scope="row" padding="none" onClick={() => handlePacientNavigation(_id)}>
                             <Stack direction="row" alignItems="center" spacing={2}>
                               <Avatar alt={name} src={!pacientImage ? avatarUrl : pacientImage} />
                               <Typography variant="subtitle2" noWrap>
@@ -218,7 +236,7 @@ export default function User() {
                           </TableCell>
 
                           <TableCell align="right">
-                            <UserMoreMenu />
+                            <TableMoreMenu menuItemsArr={moreMenuItems} />
                           </TableCell>
                         </TableRow>
                       );
