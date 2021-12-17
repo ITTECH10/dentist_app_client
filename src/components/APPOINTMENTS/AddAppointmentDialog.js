@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { usePacientContext } from './../../context/PacientContext'
-import { useApp } from './../../context/AppContext'
+import { usePacientContext } from '../../context/PacientContext'
+import { useApp } from '../../context/AppContext'
 import axios from 'axios';
 
 import Button from '@mui/material/Button';
@@ -21,12 +21,13 @@ const initialFields = {
     selectedPacient: ''
 }
 
-export default function AddAppointmentModal() {
+export default function AddAppointmentModal({ title, pacientId }) {
     const [open, setOpen] = React.useState(false)
     const [btnLoading, setBtnLoading] = React.useState(false)
     const [fields, setFields] = React.useState(initialFields)
     const { pacients, appointments, setAppointments } = usePacientContext()
     const { setGeneralAlertOptions } = useApp()
+    const disabledSubmitCheck = (Object.values(fields).some(field => field === '') && !pacientId) || (Object.values(fields).slice(0, 2).some(field => field === '') && pacientId)
 
     let addAppointmentTimeout
     React.useState(() => {
@@ -62,7 +63,7 @@ export default function AddAppointmentModal() {
         e.preventDefault();
         setBtnLoading(true)
 
-        axios.post(`/pacients/${fields.selectedPacient}/appointments`, { ...fields })
+        axios.post(`/pacients/${!pacientId ? fields.selectedPacient : pacientId}/appointments`, { ...fields })
             .then(res => {
                 if (res.status === 201) {
                     const updatedAppointments = [...appointments, { ...res.data.newAppointment }]
@@ -86,9 +87,12 @@ export default function AddAppointmentModal() {
 
     return (
         <>
-            <EventNoteIcon onClick={handleClickOpen} />
+            {!title ? <EventNoteIcon onClick={handleClickOpen} /> :
+                <Button variant="contained" onClick={handleClickOpen} endIcon={<EventNoteIcon />}>
+                    {title}
+                </Button>}
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Novi Termin</DialogTitle>
+                <DialogTitle>{title}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         Da biste dodali novi termin, molimo vas popunite informacije
@@ -98,18 +102,21 @@ export default function AddAppointmentModal() {
                         component="form"
                         onSubmit={handleSubmit}
                     >
-                        <Autocomplete
-                            disablePortal
-                            id="pacients-box-filter"
-                            options={autocompletePacients}
-                            onChange={(e, v) => setFields({ ...fields, selectedPacient: v.id })}
-                            fullWidth
-                            renderInput={(params) => <TextField
-                                {...params} variant="standard" sx={{ mt: 1 }} label="Za" />}
-                        />
+                        {!pacientId &&
+                            <Autocomplete
+                                disablePortal
+                                id="pacients-box-filter"
+                                required
+                                options={autocompletePacients}
+                                onChange={(e, v) => setFields({ ...fields, selectedPacient: v.id })}
+                                fullWidth
+                                renderInput={(params) => <TextField
+                                    {...params} variant="standard" sx={{ mt: 1 }} label="Za" />}
+                            />}
                         <TextField
                             id="date"
                             name="date"
+                            required
                             label="Datum"
                             type="date"
                             sx={{ mt: 2 }}
@@ -127,6 +134,7 @@ export default function AddAppointmentModal() {
                             fullWidth
                             onChange={handleChange}
                             variant="standard"
+                            required
                             multiline
                             rows={3}
                         />
@@ -135,7 +143,7 @@ export default function AddAppointmentModal() {
                             <Button
                                 variant="contained"
                                 color="primary"
-                                disabled={Object.values(fields).some(field => field === '')}
+                                disabled={disabledSubmitCheck}
                                 type="submit"
                             >
                                 {btnLoading ? <CircularProgress style={{ color: '#fff' }} size={24} /> : 'Gotovo'}

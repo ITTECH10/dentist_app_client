@@ -10,6 +10,7 @@ import PacientImageBox from './../components/PACIENTS/_details/PacientImageBox'
 import PacientInfoBox from './../components/PACIENTS/_details/PacientInfoBox'
 import PacientNavigation from './../components/PACIENTS/_details/PacientNavigation'
 import DiagnosisEvidenceTable from './../components/PACIENTS/_details/DiagnosisEvidenceTable'
+import AddAppointmentDialog from '../components/APPOINTMENTS/AddAppointmentDialog'
 
 const PacientDetails = () => {
     const { getSelectedPacient, selectedPacient } = usePacientContext()
@@ -28,10 +29,7 @@ const PacientDetails = () => {
             <Container maxWidth="lg">
                 <Stack sx={{ pb: 5 }} direction="row" alignItems="center" justifyContent="space-between">
                     <Typography variant="h4">Aktivni pacijent</Typography>
-                    <Button
-                        variant="contained"
-                        endIcon={<EventNoteIcon />}
-                    >Zakaži Termin</Button>
+                    <AddAppointmentDialog title="Zakaži Termin" pacientId={_id} />
                 </Stack>
                 <Card sx={{ overflow: 'hidden' }}>
                     <Grid container>

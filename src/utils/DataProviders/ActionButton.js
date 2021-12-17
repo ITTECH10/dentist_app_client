@@ -1,5 +1,5 @@
 import AddPacientModal from '../../components/PACIENTS/AddPacientModal';
-import AddAppointmentModal from '../../components/APPOINTMENTS/AddAppointmentModal';
+import AddAppointmentModal from '../../components/APPOINTMENTS/AddAppointmentDialog';
 import AddEmployeeModal from '../../components/EMPLOYEES/AddEmployeeModal';
 import AddOrdinationModal from '../../components/ORDINATIONS/AddOrdinationModal';
 

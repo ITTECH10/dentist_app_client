@@ -1,3 +1,4 @@
+import { useEmployeeContext } from './../context/EmployeeContext'
 import { filter } from 'lodash';
 import { Icon } from '@iconify/react';
 import { sentenceCase } from 'change-case';
@@ -31,7 +32,7 @@ import TableMoreMenu from './../components/_dashboard/user/TableMoreMenu'
 //
 import USERLIST from '../_mocks_/user';
 import { moreMenuItems } from './../utils/DataProviders/TableMoreMenu'
-
+import { hasPermission, actions } from './../utils/DataProviders/ROLES/permissions'
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -81,6 +82,9 @@ export default function User() {
     const [orderBy, setOrderBy] = useState('name');
     const [filterName, setFilterName] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(5);
+    const { logedInEmployee } = useEmployeeContext()
+
+    const allowed = hasPermission(logedInEmployee, actions.ADD_EMPLOYEE)
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -141,14 +145,15 @@ export default function User() {
                     <Typography variant="h4" gutterBottom>
                         Zaposlenici
                     </Typography>
-                    <Button
-                        variant="contained"
-                        component={RouterLink}
-                        to="#"
-                        startIcon={<Icon icon={plusFill} />}
-                    >
-                        Novi Zaposlenik
-                    </Button>
+                    {allowed &&
+                        <Button
+                            variant="contained"
+                            component={RouterLink}
+                            to="#"
+                            startIcon={<Icon icon={plusFill} />}
+                        >
+                            Novi Zaposlenik
+                        </Button>}
                 </Stack>
 
                 <Card>
