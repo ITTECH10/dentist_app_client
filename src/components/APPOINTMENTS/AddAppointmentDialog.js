@@ -14,20 +14,28 @@ import DialogTitle from '@mui/material/DialogTitle';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
+import DateTimePicker from '@mui/lab/DateTimePicker';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+/////////////////////////////
+import { Icon } from '@iconify/react';
+import plusFill from '@iconify/icons-eva/plus-fill';
 
 const initialFields = {
-    date: '',
+    date: new Date(),
     note: '',
     selectedPacient: ''
 }
 
-export default function AddAppointmentModal({ title, pacientId }) {
+export default function AddAppointmentModal({ title, pacientId, onlyIcon }) {
     const [open, setOpen] = React.useState(false)
     const [btnLoading, setBtnLoading] = React.useState(false)
     const [fields, setFields] = React.useState(initialFields)
     const { pacients, appointments, setAppointments } = usePacientContext()
     const { setGeneralAlertOptions } = useApp()
     const disabledSubmitCheck = (Object.values(fields).some(field => field === '') && !pacientId) || (Object.values(fields).slice(0, 2).some(field => field === '') && pacientId)
+
+    console.log(fields.date)
 
     let addAppointmentTimeout
     React.useState(() => {
@@ -87,69 +95,88 @@ export default function AddAppointmentModal({ title, pacientId }) {
 
     return (
         <>
-            {!title ? <EventNoteIcon onClick={handleClickOpen} /> :
-                <Button variant="contained" onClick={handleClickOpen} endIcon={<EventNoteIcon />}>
+            {onlyIcon ?
+                <EventNoteIcon onClick={handleClickOpen} />
+                :
+                <Button
+                    variant="contained"
+                    startIcon={<Icon icon={plusFill} />}
+                    onClick={handleClickOpen}
+                >
                     {title}
-                </Button>}
+                </Button>
+            }
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>{title}</DialogTitle>
+                <DialogTitle>Novi Termin</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         Da biste dodali novi termin, molimo vas popunite informacije
                         ispod.
                     </DialogContentText>
-                    <Box
-                        component="form"
-                        onSubmit={handleSubmit}
-                    >
-                        {!pacientId &&
-                            <Autocomplete
-                                disablePortal
-                                id="pacients-box-filter"
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <Box
+                            component="form"
+                            onSubmit={handleSubmit}
+                        >
+                            {/* LATER POSITION BETTER OR REMOVE ENTIRELY */}
+                            <DateTimePicker
+                                label="Datum i vrijeme"
+                                value={fields.date}
                                 required
-                                options={autocompletePacients}
-                                onChange={(e, v) => setFields({ ...fields, selectedPacient: v.id })}
+                                ampm={false}
+                                // style={{ minHeight: 200 }}
+                                onChange={(value) => setFields({ ...fields, date: value })}
+                                renderInput={(params) => <TextField variant="standard" sx={{ mt: 1, mb: -1 }} fullWidth {...params} />}
+                            />
+                            {!pacientId &&
+                                <Autocomplete
+                                    disablePortal
+                                    id="pacients-box-filter"
+                                    required
+                                    options={autocompletePacients}
+                                    onChange={(e, v) => setFields({ ...fields, selectedPacient: v.id })}
+                                    fullWidth
+                                    renderInput={(params) => <TextField
+                                        {...params} variant="standard" sx={{ mt: 1 }} label="Za" />}
+                                />}
+                            {/* <TextField
+                                id="date"
+                                name="date"
+                                required
+                                label="Datum"
+                                type="date"
+                                sx={{ mt: 2 }}
                                 fullWidth
-                                renderInput={(params) => <TextField
-                                    {...params} variant="standard" sx={{ mt: 1 }} label="Za" />}
-                            />}
-                        <TextField
-                            id="date"
-                            name="date"
-                            required
-                            label="Datum"
-                            type="date"
-                            sx={{ mt: 2 }}
-                            fullWidth
-                            onChange={handleChange}
-                            variant="standard"
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
-                        <TextField
-                            name="note"
-                            id="note"
-                            label="Kratak nagovještaj..."
-                            fullWidth
-                            onChange={handleChange}
-                            variant="standard"
-                            required
-                            multiline
-                            rows={3}
-                        />
-                        <DialogActions>
-                            <Button variant="contained" color="error" onClick={handleClose}>Nazad</Button>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                disabled={disabledSubmitCheck}
-                                type="submit"
-                            >
-                                {btnLoading ? <CircularProgress style={{ color: '#fff' }} size={24} /> : 'Gotovo'}
-                            </Button>
-                        </DialogActions>
-                    </Box>
+                                onChange={handleChange}
+                                variant="standard"
+                                InputLabelProps={{
+                                    shrink: true,
+                                }}
+                            /> */}
+                            <TextField
+                                name="note"
+                                id="note"
+                                label="Kratka napomena..."
+                                fullWidth
+                                onChange={handleChange}
+                                variant="standard"
+                                required
+                                multiline
+                                rows={3}
+                            />
+                            <DialogActions>
+                                <Button variant="contained" color="error" onClick={handleClose}>Nazad</Button>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    disabled={disabledSubmitCheck}
+                                    type="submit"
+                                >
+                                    {btnLoading ? <CircularProgress style={{ color: '#fff' }} size={24} /> : 'Gotovo'}
+                                </Button>
+                            </DialogActions>
+                        </Box>
+                    </LocalizationProvider>
                 </DialogContent>
             </Dialog>
         </>

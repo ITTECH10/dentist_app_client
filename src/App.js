@@ -16,8 +16,8 @@ import Loader from './components/Loader/Loader'
 // ----------------------------------------------------------------------
 
 export default function App() {
-  const { setAuthenticated, appLoading, token } = useApp()
-  const { getAllPacients } = usePacientContext()
+  const { setAuthenticated, appLoading, token, logout } = useApp()
+  const { getAllPacients, getAllAppointments } = usePacientContext()
   const { getLogedInEmployee, getAllEmployees } = useEmployeeContext()
 
   // ONLY RUN IF WE ARE AUTHENTICATED, AND WE CAN ONLY
@@ -28,6 +28,7 @@ export default function App() {
       getAllPacients()
       getLogedInEmployee()
       getAllEmployees()
+      getAllAppointments()
     }
 
     if (token) {
@@ -35,12 +36,12 @@ export default function App() {
 
       if (new Date(decoded.exp * 1000) < new Date()) {
         // !EXPIRED
-        console.log('loging out...')
+        logout()
       } else {
         setAuthenticated(true)
       }
     }
-  }, [token, setAuthenticated, getAllPacients, getLogedInEmployee])
+  }, [token, setAuthenticated, getAllPacients, getLogedInEmployee, getAllEmployees, getAllAppointments])
 
   return (
     !appLoading ?

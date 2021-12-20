@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom'
 import { filter } from 'lodash';
 import { useState } from 'react';
 import { usePacientContext } from './../../../context/PacientContext';

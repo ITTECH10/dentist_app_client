@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { usePacientContext } from './../../context/PacientContext'
-import { useApp } from './../../context/AppContext'
+import { usePacientContext } from '../../context/PacientContext'
+import { useApp } from '../../context/AppContext'
 import axios from 'axios';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -12,6 +12,9 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import CircularProgress from '@mui/material/CircularProgress';
+/////////////////////////////////////
+import { Icon } from '@iconify/react';
+import plusFill from '@iconify/icons-eva/plus-fill';
 
 const genders = [
     {
@@ -36,7 +39,7 @@ const initialFields = {
     pacientImage: ''
 }
 
-export default function AddPacientModal() {
+export default function AddPacientModal({ onlyIcon }) {
     const [open, setOpen] = React.useState(false)
     const [btnLoading, setBtnLoading] = React.useState(false)
     const { setPacients, pacients } = usePacientContext()
@@ -119,7 +122,16 @@ export default function AddPacientModal() {
 
     return (
         <>
-            <PersonAddIcon onClick={handleClickOpen} />
+            {onlyIcon ?
+                <PersonAddIcon onClick={handleClickOpen} />
+                : <Button
+                    variant="contained"
+                    startIcon={<Icon icon={plusFill} />}
+                    onClick={handleClickOpen}
+                >
+                    Novi Pacijent
+                </Button>
+            }
             <Dialog open={open} onClose={handleClose}>
                 <DialogTitle>Novi Pacijent</DialogTitle>
                 <DialogContent>

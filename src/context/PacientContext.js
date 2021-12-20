@@ -34,10 +34,20 @@ const PacientContextProvider = ({ children }) => {
                 if (res.status === 200) {
                     setAppLoading(false)
                     setSelectedPacient(res.data.pacient)
-                    navigate(`/dashboard/pacients/${id}`)
+                    navigate(`/pacients/${id}`)
                 }
-            }).catch(err => console.log(err))
+            }).catch(err => console.log(err.response))
     }, [selectedPacient])
+
+    const getAllAppointments = React.useCallback(() => {
+        axios('/appointments').then(res => {
+            if (res.status === 200) {
+                setAppointments(res.data.appointments)
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+    }, [])
 
     const value = {
         getAllPacients,
@@ -45,6 +55,7 @@ const PacientContextProvider = ({ children }) => {
         setPacients,
         appointments,
         setAppointments,
+        getAllAppointments,
         getSelectedPacient,
         selectedPacient
     }

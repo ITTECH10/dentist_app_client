@@ -15,7 +15,7 @@ import AddAppointmentDialog from '../components/APPOINTMENTS/AddAppointmentDialo
 const PacientDetails = () => {
     const { getSelectedPacient, selectedPacient } = usePacientContext()
     const location = useLocation()
-    const pacientId = location.pathname.split('/')[3]
+    const pacientId = location.pathname.split('/')[2]
     const { _id } = selectedPacient
 
     React.useEffect(() => {

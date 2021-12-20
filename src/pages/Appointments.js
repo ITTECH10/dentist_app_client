@@ -1,14 +1,12 @@
 import { filter } from 'lodash';
 import { useState } from 'react';
-import AddEmployeeDialog from './../components/EMPLOYEES/AddEmployeeDialog'
-import { useEmployeeContext } from './../context/EmployeeContext';
+import AddAppointmentDialog from './../components/APPOINTMENTS/AddAppointmentDialog'
+import { usePacientContext } from './../context/PacientContext';
 // material
 import {
     Card,
     Table,
     Stack,
-    Avatar,
-    Button,
     Checkbox,
     TableRow,
     TableBody,
@@ -30,13 +28,11 @@ import DeleteEmployeeDialog from './../components/EMPLOYEES/DeleteEmployeeDialog
 
 //
 import USERLIST from '../_mocks_/user';
-import { hasPermission, actions } from './../utils/DataProviders/ROLES/permissions'
-
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-    { id: 'name', label: 'Ime', alignRight: false },
-    { id: 'role', label: 'Uloga', alignRight: false },
+    { id: 'pacientName', label: 'Pacijent', alignRight: false },
+    { id: 'date', label: 'Datum i vrijeme', alignRight: false },
     { id: 'email', label: 'Email', alignRight: false },
     { id: 'phone', label: 'Telefon', alignRight: false },
     { id: 'ordination', label: 'Ordinacija', alignRight: false },
@@ -69,20 +65,22 @@ function applySortFilter(array, comparator, query) {
         return a[1] - b[1];
     });
     if (query) {
-        return filter(array, (_user) => `${_user.firstName} ${_user.lastName}`.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+        return filter(array, (_user) => {
+            const localeDate = new Date(_user.date).toLocaleDateString('bs-BA')
+            return `${_user.pacientId.firstName} ${_user.pacientId.lastName}`.toLowerCase().indexOf(query.toLowerCase()) !== -1 || localeDate.toLowerCase().indexOf(query.toLowerCase()) !== -1
+        });
     }
     return stabilizedThis.map((el) => el[0]);
 }
 
 export default function User() {
-    const { employees, logedInEmployee } = useEmployeeContext()
+    const { appointments, selectedPacient } = usePacientContext()
     const [page, setPage] = useState(0);
     const [order, setOrder] = useState('asc');
     const [selected, setSelected] = useState([]);
-    const [orderBy, setOrderBy] = useState('name');
+    const [orderBy, setOrderBy] = useState('pacientName');
     const [filterName, setFilterName] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(5);
-    const allowed = hasPermission(logedInEmployee, actions.ADD_EMPLOYEE)
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -92,7 +90,7 @@ export default function User() {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = employees.map((n) => n.name);
+            const newSelecteds = appointments.map((n) => n._id);
             setSelected(newSelecteds);
             return;
         }
@@ -130,22 +128,20 @@ export default function User() {
         setFilterName(event.target.value);
     };
 
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - employees.length) : 0;
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - appointments.length) : 0;
 
-    const filteredUsers = applySortFilter(employees, getComparator(order, orderBy), filterName);
+    const filteredUsers = applySortFilter(appointments, getComparator(order, orderBy), filterName);
 
     const isUserNotFound = filteredUsers.length === 0;
 
     return (
-        <Page title="Zaposlenici">
+        <Page title="Termini">
             <Container>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                     <Typography variant="h4" gutterBottom>
-                        Zaposlenici
+                        Termini
                     </Typography>
-                    {allowed &&
-                        <AddEmployeeDialog />
-                    }
+                    <AddAppointmentDialog title="Novi Termin" />
                 </Stack>
 
                 <Card>
@@ -153,7 +149,7 @@ export default function User() {
                         numSelected={selected.length}
                         filterName={filterName}
                         onFilterName={handleFilterByName}
-                        placeholderRole="Pronađite zaposlenika..."
+                        placeholderRole="Pronađite termin..."
                     />
 
                     <Scrollbar>
@@ -172,12 +168,15 @@ export default function User() {
                                     {filteredUsers
                                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                         .map((row) => {
-                                            const name = row.firstName + ' ' + row.lastName
-                                            const { _id, birthDate, role, phone, gender, employeeImage, checked, email, ordination } = row;
-                                            const status = checked ? 'Pregledan' : 'Nepregledan'
-                                            const formatedGender = gender === 'male' ? 'Muško' : 'Žensko'
-                                            const avatarUrl = gender === 'female' ? '/static/mock-images/avatars/pacient_female_default.png' : '/static/mock-images/avatars/pacient_male_default.png'
-                                            const isItemSelected = selected.indexOf(name) !== -1;
+                                            // const name = row.pacientId.firstName + ' ' + row.pacientId.lastName
+                                            const { _id, date, pacientId } = row;
+                                            const { firstName, lastName } = selectedPacient
+                                            const selectedPacientName = `${firstName} ${lastName}`
+                                            const pacientName = `${pacientId.firstName} ${pacientId.lastName}`
+                                            const name = !pacientName.startsWith('undefined') ? pacientName : selectedPacientName
+                                            const localeFormatedDate = new Date(date).toLocaleString('bs-BA')
+
+                                            const isItemSelected = selected.indexOf(_id) !== -1;
 
                                             return (
                                                 <TableRow
@@ -194,21 +193,17 @@ export default function User() {
                                                     >
                                                         <Checkbox
                                                             checked={isItemSelected}
-                                                            onChange={(event) => handleClick(event, name)}
+                                                            onChange={(event) => handleClick(event, _id)}
                                                         />
                                                     </TableCell>
-                                                    {/* <TableCell component="th" scope="row" padding="none" onClick={() => handlePacientNavigation(_id)}> */}
                                                     <TableCell component="th" scope="row" padding="none">
-                                                        <Stack direction="row" alignItems="center" spacing={2}>
-                                                            <Avatar alt={name} src={!employeeImage ? avatarUrl : employeeImage} />
-                                                            <Typography variant="subtitle2" noWrap>
-                                                                {name}
-                                                            </Typography>
-                                                        </Stack>
+                                                        <Typography variant="subtitle2" noWrap>
+                                                            {name}
+                                                        </Typography>
                                                     </TableCell>
-                                                    <TableCell align="left">{role}</TableCell>
-                                                    <TableCell align="left">{email}</TableCell>
-                                                    <TableCell align="left">{phone}</TableCell>
+                                                    <TableCell align="left">{localeFormatedDate}</TableCell>
+                                                    <TableCell align="left">pacient@email.com</TableCell>
+                                                    <TableCell align="left">000-000-000</TableCell>
                                                     <TableCell align="left">
                                                         Živinice
                                                     </TableCell>
@@ -244,7 +239,7 @@ export default function User() {
                     <TablePagination
                         rowsPerPageOptions={[5, 10, 25]}
                         component="div"
-                        count={employees.length}
+                        count={filteredUsers.length}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}

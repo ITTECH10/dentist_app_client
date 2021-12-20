@@ -57,13 +57,6 @@ export default function EditPacientDialog({ pacientId }) {
     formData.append('phone', fields.phone)
     formData.append('photo', fields.pacientImage)
 
-    let addPacientTimeout
-    React.useEffect(() => {
-        return () => {
-            clearTimeout(addPacientTimeout)
-        }
-    }, [addPacientTimeout])
-
     // STARTING WITH SERVER APPROACH // NICE TO CONSIDER CLIENT APPROACH // OR OPPOSITE
     // ALREADY CONSIDERING TO TAKE THIS APPROACH
     const handleClickOpen = () => {
@@ -112,18 +105,15 @@ export default function EditPacientDialog({ pacientId }) {
                 foundPacient.birthDate = res.data.updatedPacient.birthDate
                 foundPacient.pacientImage = res.data.updatedPacient.pacientImage
                 foundPacient.phone = res.data.updatedPacient.phone
-
-                addPacientTimeout = setTimeout(() => {
-                    setPacients(updatedPacients)
-                    setBtnLoading(false)
-                    setOpen(false)
-                    setGeneralAlertOptions({
-                        open: true,
-                        message: 'Uspješno ste izmjenili informacije o pacijentu!',
-                        severity: 'success',
-                        hideAfter: 5000
-                    })
-                }, 1000)
+                setPacients(updatedPacients)
+                setBtnLoading(false)
+                setOpen(false)
+                setGeneralAlertOptions({
+                    open: true,
+                    message: 'Uspješno ste izmjenili informacije o pacijentu!',
+                    severity: 'success',
+                    hideAfter: 5000
+                })
             }
         }).catch(err => {
             console.log(err)

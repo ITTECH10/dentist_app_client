@@ -1,11 +1,12 @@
 import { actions, roles } from "./constants.js";
 
 const mappings = new Map();
-// GENERAL FOR CONDITIONAL RENDERING // STORED IN GLOBAL STATE // SINGLE SOURCE OF TRUTH // USEFUL
 mappings.set(actions.IS_SUPER_ADMIN, [roles.DIRECTOR])
+mappings.set(actions.MAIN_ROLE_UI_VISIBILITY, [roles.DIRECTOR, roles.DEPUTY]);
 
 mappings.set(actions.ADD_EMPLOYEE, [roles.DIRECTOR]);
-mappings.set(actions.MAIN_ROLE_UI_VISIBILITY, [roles.DIRECTOR, roles.DEPUTY]);
+mappings.set(actions.EDIT_EMPLOYEE, [roles.DIRECTOR]);
+mappings.set(actions.DELETE_EMPLOYEE, [roles.DIRECTOR]);
 
 export const hasPermission = (employee, action) => {
     if (!employee?.role) {

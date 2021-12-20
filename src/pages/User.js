@@ -1,18 +1,14 @@
 import { useNavigate } from 'react-router-dom'
 import { filter } from 'lodash';
-import { Icon } from '@iconify/react';
-// import { sentenceCase } from 'change-case';
 import { useState } from 'react';
-import plusFill from '@iconify/icons-eva/plus-fill';
-import { Link as RouterLink } from 'react-router-dom';
 import { usePacientContext } from './../context/PacientContext';
+import AddPacientDialog from './../components/PACIENTS/AddPacientDialog'
 // material
 import {
   Card,
   Table,
   Stack,
   Avatar,
-  Button,
   Checkbox,
   TableRow,
   TableBody,
@@ -21,9 +17,6 @@ import {
   Typography,
   TableContainer,
   TablePagination,
-  ListItemIcon,
-  ListItemText,
-  MenuItem
 } from '@mui/material';
 
 // components
@@ -83,7 +76,7 @@ function applySortFilter(array, comparator, query) {
 
 export default function User() {
   const navigate = useNavigate()
-  const { pacients, getSelectedPacient, selectedPacient } = usePacientContext()
+  const { pacients, getSelectedPacient } = usePacientContext()
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
@@ -92,13 +85,8 @@ export default function User() {
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handlePacientNavigation = (id) => {
-    const { _id: selectedPacientId } = selectedPacient
-
-    if (selectedPacientId !== id) {
-      getSelectedPacient(id)
-    }
-
-    navigate(`/dashboard/pacients/${id}`)
+    getSelectedPacient(id)
+    navigate(`/pacients/${id}`)
   }
 
   const handleRequestSort = (event, property) => {
@@ -160,14 +148,7 @@ export default function User() {
           <Typography variant="h4" gutterBottom>
             Pacijenti
           </Typography>
-          <Button
-            variant="contained"
-            component={RouterLink}
-            to="#"
-            startIcon={<Icon icon={plusFill} />}
-          >
-            Novi Pacijent
-          </Button>
+          <AddPacientDialog />
         </Stack>
 
         <Card>

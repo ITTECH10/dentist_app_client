@@ -10,10 +10,12 @@ export const useApp = () => {
 }
 
 const AppContextProvider = ({ children }) => {
+    const navigate = useNavigate()
+    ///////////////////////////////
+
     const [token, setToken] = useLocalStorage('token', '')
     const [authenticated, setAuthenticated] = React.useState(false)
     const [appLoading, setAppLoading] = React.useState(false)
-    const navigate = useNavigate()
     const [generalAlertOptions, setGeneralAlertOptions] = React.useState({
         open: false,
         message: '',

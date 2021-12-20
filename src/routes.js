@@ -13,7 +13,10 @@ import DashboardApp from './pages/DashboardApp';
 import Products from './pages/Products';
 import Blog from './pages/Blog';
 import User from './pages/User';
+import Diagnosis from './pages/Diagnosis';
+import Ordinations from './pages/Ordinations';
 import PacientDetails from './pages/PacientDetails';
+import Appointments from './pages/Appointments';
 import NotFound from './pages/Page404';
 // ---------------------------------------------------------------------
 
@@ -26,9 +29,12 @@ export default function Router() {
   const MAIN_ROLE_ROUTING = [
     // { element: <Navigate to={authenticated ? "/dashboard/app" : "/login"} replace /> },
     { path: 'dashboard/app', element: <DashboardApp /> },
-    { path: 'dashboard/pacients', element: <User /> },
-    { path: 'dashboard/pacients/:id', element: <PacientDetails /> },
-    { path: 'dashboard/employees', element: <Employees /> },
+    { path: '/pacients', element: <User /> },
+    { path: '/pacients/:id', element: <PacientDetails /> },
+    { path: '/employees', element: <Employees /> },
+    { path: '/appointments', element: <Appointments /> },
+    { path: '/ordinations', element: <Ordinations /> },
+    { path: '/diagnosis', element: <Diagnosis /> },
     { path: 'products', element: <Products /> },
     { path: 'blog', element: <Blog /> },
     { path: '/', element: <Navigate to="/dashboard/app" /> },
@@ -37,8 +43,10 @@ export default function Router() {
 
   const SUB_ROLE_ROUTING = [
     { path: 'dashboard/app', element: <DashboardApp /> },
-    { path: 'dashboard/pacients', element: <User /> },
-    { path: 'dashboard/pacients/:id', element: <PacientDetails /> },
+    { path: '/pacients', element: <User /> },
+    { path: '/pacients/:id', element: <PacientDetails /> },
+    { path: '/appointments', element: <Appointments /> },
+    { path: '/diagnosis', element: <Diagnosis /> },
     // { path: 'dashboard/employees', element: <Navigate to="/dashboard/app" /> },
     { path: '/', element: <Navigate to="/dashboard/app" /> },
     { path: '*', element: <NotFound /> }
