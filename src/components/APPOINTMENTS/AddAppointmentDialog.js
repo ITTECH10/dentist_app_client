@@ -35,8 +35,6 @@ export default function AddAppointmentModal({ title, pacientId, onlyIcon }) {
     const { setGeneralAlertOptions } = useApp()
     const disabledSubmitCheck = (Object.values(fields).some(field => field === '') && !pacientId) || (Object.values(fields).slice(0, 2).some(field => field === '') && pacientId)
 
-    console.log(fields.date)
-
     let addAppointmentTimeout
     React.useState(() => {
         return () => {
@@ -74,7 +72,7 @@ export default function AddAppointmentModal({ title, pacientId, onlyIcon }) {
         axios.post(`/pacients/${!pacientId ? fields.selectedPacient : pacientId}/appointments`, { ...fields })
             .then(res => {
                 if (res.status === 201) {
-                    const updatedAppointments = [...appointments, { ...res.data.newAppointment }]
+                    const updatedAppointments = [...appointments, { ...res.data.newAppointment, pacientName: res.data.pacientName }]
 
                     addAppointmentTimeout = setTimeout(() => {
                         setAppointments(updatedAppointments)

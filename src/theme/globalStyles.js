@@ -68,6 +68,9 @@ export default function GlobalStyles() {
         '.blur-up.lazyloaded ': {
           WebkitFilter: 'blur(0)',
           filter: 'blur(0)'
+        },
+        '.PrivatePickersSlideTransition-root': {
+          minHeight: '200px !important',
         }
       }}
     />

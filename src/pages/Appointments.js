@@ -23,9 +23,8 @@ import Scrollbar from '../components/Scrollbar';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar } from '../components/_dashboard/user';
 import TableMoreMenu from './../components/_dashboard/user/TableMoreMenu'
-import EditEmployeeDialog from './../components/EMPLOYEES/EditEmployeeDialog'
-import DeleteEmployeeDialog from './../components/EMPLOYEES/DeleteEmployeeDialog'
-
+import EditAppointmentDialog from './../components/APPOINTMENTS/EditAppointmentDialog'
+import DeleteAppointmentDialog from './../components/APPOINTMENTS/DeleteAppointmentDialog'
 //
 import USERLIST from '../_mocks_/user';
 // ----------------------------------------------------------------------
@@ -168,12 +167,11 @@ export default function User() {
                                     {filteredUsers
                                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                         .map((row) => {
-                                            // const name = row.pacientId.firstName + ' ' + row.pacientId.lastName
-                                            const { _id, date, pacientId } = row;
-                                            const { firstName, lastName } = selectedPacient
-                                            const selectedPacientName = `${firstName} ${lastName}`
+                                            const { _id, date, pacientId, pacientName: generatedPacientName } = row;
                                             const pacientName = `${pacientId.firstName} ${pacientId.lastName}`
-                                            const name = !pacientName.startsWith('undefined') ? pacientName : selectedPacientName
+                                            const name = generatedPacientName || pacientName
+                                            // const name = !pacientName.startsWith('undefined') ? pacientName : generatedPacientName
+
                                             const localeFormatedDate = new Date(date).toLocaleString('bs-BA')
 
                                             const isItemSelected = selected.indexOf(_id) !== -1;
@@ -210,8 +208,8 @@ export default function User() {
 
                                                     <TableCell align="right">
                                                         <TableMoreMenu>
-                                                            <EditEmployeeDialog employeeId={_id} />
-                                                            <DeleteEmployeeDialog employeeId={_id} />
+                                                            <EditAppointmentDialog appointmentId={_id} />
+                                                            <DeleteAppointmentDialog appointmentId={_id} />
                                                         </TableMoreMenu>
                                                     </TableCell>
                                                 </TableRow>
