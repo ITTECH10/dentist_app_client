@@ -21,16 +21,16 @@ import Box from '@mui/material/Box'
 import { Icon } from '@iconify/react';
 import trash2Outline from '@iconify/icons-eva/trash-2-outline';
 
-export default function DeleteAppointmentDialog({ appointmentId }) {
+export default function DeleteDiagnosisDialog({ diagnosisId }) {
     const [open, setOpen] = React.useState(false);
     const [btnLoading, setBtnLoading] = React.useState(false)
     const { setGeneralAlertOptions } = useApp()
-    const { appointments, setAppointments } = usePacientContext()
+    const { diagnosis, setDiagnosis, selectedPacient, setSelectedPacient } = usePacientContext()
 
-    let deleteAppointmentTimeout
+    let deleteDiagnosisTimeout
     React.useEffect(() => {
         return () => {
-            clearTimeout(deleteAppointmentTimeout)
+            clearTimeout(deleteDiagnosisTimeout)
         }
     }, [])
 
@@ -46,22 +46,27 @@ export default function DeleteAppointmentDialog({ appointmentId }) {
         e.preventDefault();
         setBtnLoading(true)
 
-        axios.delete(`/appointments/${appointmentId}`)
+        axios.delete(`/diagnosis/${diagnosisId}`)
             .then(res => {
                 if (res.status === 204) {
-                    const updatedAppointments = appointments.filter(appointment => appointment._id !== appointmentId)
+                    const updatedDiagnosis = diagnosis.filter(diagnose => diagnose._id !== diagnosisId)
 
-                    deleteAppointmentTimeout = setTimeout(() => {
-                        setBtnLoading(false)
-                        setAppointments(updatedAppointments)
-                        setOpen(false)
-                        setGeneralAlertOptions({
-                            open: true,
-                            message: 'Uspješno ste obrisali termin!',
-                            severity: 'success',
-                            hideAfter: 5000
-                        })
-                    }, 1000)
+                    if (selectedPacient.diagnosis) {
+                        setSelectedPacient(prevState => ({
+                            ...prevState,
+                            diagnosis: selectedPacient.diagnosis.filter(diagnose => diagnose._id !== diagnosisId)
+                        }))
+                    }
+
+                    setBtnLoading(false)
+                    setDiagnosis(updatedDiagnosis)
+                    setOpen(false)
+                    setGeneralAlertOptions({
+                        open: true,
+                        message: 'Uspješno ste obrisali dijagnozu!',
+                        severity: 'success',
+                        hideAfter: 5000
+                    })
                 }
             })
     }
@@ -81,7 +86,7 @@ export default function DeleteAppointmentDialog({ appointmentId }) {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {"Da li ste sigurni da želite obrisati ovaj termin?"}
+                    {"Da li ste sigurni da želite obrisati ovu dijagnozu?"}
                 </DialogTitle>
                 <DialogContent>
                     <Box
@@ -89,7 +94,7 @@ export default function DeleteAppointmentDialog({ appointmentId }) {
                         onSubmit={handleSubmit}
                     >
                         <DialogContentText id="alert-dialog-description">
-                            Upozorenje! Nakon brisanja ovog termina svi podaci povezani sa njim
+                            Upozorenje! Nakon brisanja ove dijagnoze svi podaci povezani sa njom
                             bit će obrisani.
                         </DialogContentText>
                         <DialogActions>

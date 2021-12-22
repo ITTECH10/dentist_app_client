@@ -19,8 +19,8 @@ import SearchNotFound from '../../SearchNotFound';
 import { UserListHead } from '../../../components/_dashboard/user';
 import TableMoreMenu from './../../_dashboard/user/TableMoreMenu'
 import ListToolbar from '../../../components/_dashboard/user/ListToolbar'
-import { moreMenuItems } from './../../../utils/DataProviders/TableMoreMenu'
-
+import DeleteDiagnosisDialog from './../../DIAGNOSIS/DeleteDiagnosisDialog'
+import EditDiagnosisDialog from './../../DIAGNOSIS/EditDiagnosisDialog'
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -64,13 +64,16 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function User() {
-    const { pacients } = usePacientContext()
+    const { selectedPacient } = usePacientContext()
     const [page, setPage] = useState(0);
     const [order, setOrder] = useState('asc');
     const [selected, setSelected] = useState([]);
     const [orderBy, setOrderBy] = useState('name');
     const [filterName, setFilterName] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(5);
+    const diagnosis = selectedPacient.diagnosis || []
+
+    // console.log(selectedPacient)
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -80,7 +83,7 @@ export default function User() {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = pacients.map((n) => n.name);
+            const newSelecteds = diagnosis.map((n) => n.name);
             setSelected(newSelecteds);
             return;
         }
@@ -118,9 +121,9 @@ export default function User() {
         setFilterName(event.target.value);
     };
 
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - pacients.length) : 0;
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - diagnosis.length) : 0;
 
-    const filteredUsers = applySortFilter(pacients, getComparator(order, orderBy), filterName);
+    const filteredUsers = applySortFilter(diagnosis, getComparator(order, orderBy), filterName);
 
     const isUserNotFound = filteredUsers.length === 0;
 
@@ -149,7 +152,10 @@ export default function User() {
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row) => {
                                     const name = row.firstName + ' ' + row.lastName
-                                    const { _id, gender, checked } = row;
+                                    const { _id, tooth, ordination, image, kind, pacientId, employeeId, date } = row;
+                                    const formatedDate = new Date(date).toLocaleString('bs-BA')
+                                    const employeeName = `${employeeId.firstName} ${employeeId.lastName}`
+
                                     const isItemSelected = selected.indexOf(name) !== -1;
 
                                     return (
@@ -172,18 +178,21 @@ export default function User() {
                                             </TableCell>
                                             <TableCell component="th" scope="row" padding="none">
                                                 <Typography variant="subtitle2" noWrap>
-                                                    2021/03/12
+                                                    {formatedDate}
                                                 </Typography>
                                             </TableCell>
-                                            <TableCell align="left">Sanacija</TableCell>
-                                            <TableCell align="left">32</TableCell>
-                                            <TableCell align="left">Kenan Jašarevic</TableCell>
+                                            <TableCell align="left">{kind}</TableCell>
+                                            <TableCell align="left">{tooth}</TableCell>
+                                            <TableCell align="left">{employeeName}</TableCell>
                                             <TableCell align="left">
-                                                Živinice
+                                                {ordination}
                                             </TableCell>
 
                                             <TableCell align="right">
-                                                <TableMoreMenu menuItemsArr={moreMenuItems} />
+                                                <TableMoreMenu>
+                                                    <DeleteDiagnosisDialog diagnosisId={_id} />
+                                                    <EditDiagnosisDialog diagnosisId={_id} />
+                                                </TableMoreMenu>
                                             </TableCell>
                                         </TableRow>
                                     );
@@ -210,7 +219,7 @@ export default function User() {
             <TablePagination
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
-                count={pacients.length}
+                count={diagnosis.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}

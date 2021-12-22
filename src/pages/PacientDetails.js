@@ -2,8 +2,7 @@ import React from 'react'
 import { usePacientContext } from './../context/PacientContext'
 import { useLocation } from 'react-router-dom';
 import Page from '../components/Page';
-import { Container, Box, Card, Typography, Grid, Stack, Button } from '@mui/material'
-import EventNoteIcon from '@mui/icons-material/EventNote';
+import { Container, Card, Typography, Grid, Stack } from '@mui/material'
 
 /////////////////////////////
 import PacientImageBox from './../components/PACIENTS/_details/PacientImageBox'
@@ -22,7 +21,7 @@ const PacientDetails = () => {
         if (!_id) {
             getSelectedPacient(pacientId)
         }
-    }, [_id])
+    }, [_id, getSelectedPacient])
 
     return (
         <Page title="Pacijent Detalji">

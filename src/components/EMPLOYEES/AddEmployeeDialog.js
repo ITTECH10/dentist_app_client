@@ -305,12 +305,10 @@ export default function AddEmployeeDialog({ onlyIcon }) {
                                 disabled={Object.values(fields).some(field => field === '')}
                             >
                                 {btnLoading ? <CircularProgress style={{ color: '#fff' }} size={24} /> : 'Gotovo'}
-
                             </Button>
                         </DialogActions>
                     </Box>
                 </DialogContent>
-
             </Dialog>
         </>
     );
