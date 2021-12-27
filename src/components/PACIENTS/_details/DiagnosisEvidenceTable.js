@@ -58,7 +58,7 @@ function applySortFilter(array, comparator, query) {
         return a[1] - b[1];
     });
     if (query) {
-        return filter(array, (_user) => `${_user.firstName} ${_user.lastName}`.toLowerCase().indexOf(query.toLowerCase()) !== -1);
+        return filter(array, (_user) => `${_user.employeeId.firstName} ${_user.employeeId.lastName}`.toLowerCase().indexOf(query.toLowerCase()) !== -1);
     }
     return stabilizedThis.map((el) => el[0]);
 }
@@ -83,7 +83,7 @@ export default function User() {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = diagnosis.map((n) => n.name);
+            const newSelecteds = diagnosis.map((n) => n._id);
             setSelected(newSelecteds);
             return;
         }
@@ -156,7 +156,7 @@ export default function User() {
                                     const formatedDate = new Date(date).toLocaleString('bs-BA')
                                     const employeeName = `${employeeId.firstName} ${employeeId.lastName}`
 
-                                    const isItemSelected = selected.indexOf(name) !== -1;
+                                    const isItemSelected = selected.indexOf(_id) !== -1;
 
                                     return (
                                         <TableRow
@@ -173,7 +173,7 @@ export default function User() {
                                             >
                                                 <Checkbox
                                                     checked={isItemSelected}
-                                                    onChange={(event) => handleClick(event, name)}
+                                                    onChange={(event) => handleClick(event, _id)}
                                                 />
                                             </TableCell>
                                             <TableCell component="th" scope="row" padding="none">

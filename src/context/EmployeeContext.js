@@ -16,6 +16,18 @@ const EmployeeContextProvider = ({ children }) => {
     const [employees, setEmployees] = React.useState([])
     const [logedInEmployee, setLogedInEmployee] = React.useState({})
     const [isSuperAdmin, setIsSuperAdmin] = React.useState(false)
+    const [ordinations, setOrdinations] = React.useState([])
+
+    const getAllOrdinations = React.useCallback(() => {
+        axios('/ordinations')
+            .then(res => {
+                if (res.status === 200) {
+                    setOrdinations(res.data.ordinations)
+                }
+            }).catch(err => {
+                console.log(err)
+            })
+    }, [])
 
     const getAllEmployees = React.useCallback(() => {
         axios('/employees')
@@ -46,7 +58,10 @@ const EmployeeContextProvider = ({ children }) => {
         getAllEmployees,
         logedInEmployee,
         getLogedInEmployee,
-        isSuperAdmin
+        isSuperAdmin,
+        getAllOrdinations,
+        ordinations,
+        setOrdinations
     }
 
     return (

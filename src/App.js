@@ -17,8 +17,8 @@ import Loader from './components/Loader/Loader'
 
 export default function App() {
   const { setAuthenticated, appLoading, token, logout } = useApp()
-  const { getAllPacients, getAllAppointments, getAllDiagnosis } = usePacientContext()
-  const { getLogedInEmployee, getAllEmployees } = useEmployeeContext()
+  const { getAllPacients, getAllAppointments, getAllDiagnosis, getUpcomingAppointments } = usePacientContext()
+  const { getLogedInEmployee, getAllEmployees, getAllOrdinations } = useEmployeeContext()
 
   // ONLY RUN IF WE ARE AUTHENTICATED, AND WE CAN ONLY
   // BECOME AUTHENTICATED WITH A VALID TOKEN
@@ -30,6 +30,8 @@ export default function App() {
       getAllEmployees()
       getAllAppointments()
       getAllDiagnosis()
+      getAllOrdinations()
+      getUpcomingAppointments()
     }
 
     if (token) {
@@ -49,7 +51,9 @@ export default function App() {
     getLogedInEmployee,
     getAllEmployees,
     getAllAppointments,
-    getAllDiagnosis
+    getAllDiagnosis,
+    getAllOrdinations,
+    getUpcomingAppointments
   ])
 
   return (

@@ -15,6 +15,7 @@ import Blog from './pages/Blog';
 import User from './pages/User';
 import Diagnosis from './pages/Diagnosis';
 import Ordinations from './pages/Ordinations';
+import OrdinationsAlt from './pages/OrdinationsAlt';
 import PacientDetails from './pages/PacientDetails';
 import Appointments from './pages/Appointments';
 import NotFound from './pages/Page404';
@@ -33,10 +34,8 @@ export default function Router() {
     { path: '/pacients/:id', element: <PacientDetails /> },
     { path: '/employees', element: <Employees /> },
     { path: '/appointments', element: <Appointments /> },
-    { path: '/ordinations', element: <Ordinations /> },
+    { path: '/ordinations', element: <OrdinationsAlt /> },
     { path: '/diagnosis', element: <Diagnosis /> },
-    { path: 'products', element: <Products /> },
-    { path: 'blog', element: <Blog /> },
     { path: '/', element: <Navigate to="/dashboard/app" /> },
     { path: '*', element: <NotFound /> }
   ]

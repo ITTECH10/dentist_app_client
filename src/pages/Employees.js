@@ -92,7 +92,7 @@ export default function User() {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = employees.map((n) => n.name);
+            const newSelecteds = employees.map((n) => `${n.firstName} ${n.lastName}`);
             setSelected(newSelecteds);
             return;
         }

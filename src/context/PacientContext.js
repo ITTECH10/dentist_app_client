@@ -18,6 +18,9 @@ const PacientContextProvider = ({ children }) => {
     const [appointments, setAppointments] = React.useState([])
     const [diagnosis, setDiagnosis] = React.useState([])
 
+    // UPCOMING APPOINTMENTS 
+    const [upcomingAppointments, setUpcomingAppointments] = React.useState()
+
     const getAllPacients = React.useCallback(() => {
         axios('/pacients').then(res => {
             if (res.status === 200) {
@@ -50,6 +53,15 @@ const PacientContextProvider = ({ children }) => {
         })
     }, [])
 
+    const getUpcomingAppointments = React.useCallback(() => {
+        axios('/appointments/upcoming')
+            .then(res => {
+                if (res.status === 200) {
+                    setUpcomingAppointments(res.data.results)
+                }
+            }).catch(err => console.log(err))
+    }, [])
+
     const getAllDiagnosis = React.useCallback(() => {
         axios('/diagnosis').then(res => {
             if (res.status === 200) {
@@ -71,7 +83,9 @@ const PacientContextProvider = ({ children }) => {
         setSelectedPacient,
         diagnosis,
         setDiagnosis,
-        getAllDiagnosis
+        getAllDiagnosis,
+        upcomingAppointments,
+        getUpcomingAppointments
     }
 
     return (

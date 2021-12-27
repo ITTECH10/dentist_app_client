@@ -17,7 +17,10 @@ import axios from 'axios';
 axios.defaults.withCredentials = true
 
 // DEVELOPMENT
-axios.defaults.baseURL = 'http://localhost:8000/api/v1'
+// axios.defaults.baseURL = 'http://localhost:8000/api/v1'
+
+// PRODUCTION
+axios.defaults.baseURL = 'https://dentist-srv.herokuapp.com/api/v1'
 
 // ----------------------------------------------------------------------
 

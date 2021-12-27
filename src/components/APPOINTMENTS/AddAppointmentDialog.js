@@ -31,7 +31,7 @@ export default function AddAppointmentModal({ title, pacientId, onlyIcon }) {
     const [open, setOpen] = React.useState(false)
     const [btnLoading, setBtnLoading] = React.useState(false)
     const [fields, setFields] = React.useState(initialFields)
-    const { pacients, appointments, setAppointments } = usePacientContext()
+    const { pacients, appointments, setAppointments, getUpcomingAppointments } = usePacientContext()
     const { setGeneralAlertOptions } = useApp()
     const disabledSubmitCheck = (Object.values(fields).some(field => field === '') && !pacientId) || (Object.values(fields).slice(0, 2).some(field => field === '') && pacientId)
 
@@ -76,6 +76,7 @@ export default function AddAppointmentModal({ title, pacientId, onlyIcon }) {
 
                     addAppointmentTimeout = setTimeout(() => {
                         setAppointments(updatedAppointments)
+                        getUpcomingAppointments()
                         setOpen(false)
                         setBtnLoading(false)
                         setGeneralAlertOptions({

@@ -1,12 +1,14 @@
 import { filter } from 'lodash';
 import { useState } from 'react';
-import AddAppointmentDialog from './../components/APPOINTMENTS/AddAppointmentDialog'
-import { usePacientContext } from './../context/PacientContext';
+import AddOrdinationDialog from './../components/ORDINATIONS/AddOrdinationDialog'
+import { useEmployeeContext } from './../context/EmployeeContext';
 // material
 import {
     Card,
     Table,
     Stack,
+    Avatar,
+    Button,
     Checkbox,
     TableRow,
     TableBody,
@@ -23,18 +25,19 @@ import Scrollbar from '../components/Scrollbar';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar } from '../components/_dashboard/user';
 import TableMoreMenu from './../components/_dashboard/user/TableMoreMenu'
-import EditAppointmentDialog from './../components/APPOINTMENTS/EditAppointmentDialog'
-import DeleteAppointmentDialog from './../components/APPOINTMENTS/DeleteAppointmentDialog'
+import EditOrdinationDialog from './../components/ORDINATIONS/EditOrdinationDialog'
+import DeleteOrdinationDialog from './../components/ORDINATIONS/DeleteOrdinationDialog'
+
 //
 import USERLIST from '../_mocks_/user';
+import { hasPermission, actions } from './../utils/DataProviders/ROLES/permissions'
+
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-    { id: 'pacientName', label: 'Pacijent', alignRight: false },
-    { id: 'date', label: 'Datum i vrijeme', alignRight: false },
-    { id: 'email', label: 'Email', alignRight: false },
-    { id: 'phone', label: 'Telefon', alignRight: false },
-    { id: 'ordination', label: 'Ordinacija', alignRight: false },
+    { id: 'name', label: 'Naziv', alignRight: false },
+    { id: 'location', label: 'Lokacija', alignRight: false },
+    { id: 'founded', label: 'Datum osnivanja', alignRight: false },
     { id: '' }
 ];
 
@@ -64,22 +67,20 @@ function applySortFilter(array, comparator, query) {
         return a[1] - b[1];
     });
     if (query) {
-        return filter(array, (_user) => {
-            const localeDate = new Date(_user.date).toLocaleDateString('bs-BA')
-            return `${_user.pacientId.firstName} ${_user.pacientId.lastName}`.toLowerCase().indexOf(query.toLowerCase()) !== -1 || localeDate.toLowerCase().indexOf(query.toLowerCase()) !== -1
-        });
+        return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
     }
     return stabilizedThis.map((el) => el[0]);
 }
 
 export default function User() {
-    const { appointments } = usePacientContext()
+    const { ordinations, logedInEmployee } = useEmployeeContext()
     const [page, setPage] = useState(0);
     const [order, setOrder] = useState('asc');
     const [selected, setSelected] = useState([]);
-    const [orderBy, setOrderBy] = useState('pacientName');
+    const [orderBy, setOrderBy] = useState('name');
     const [filterName, setFilterName] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(5);
+    const allowed = hasPermission(logedInEmployee, actions.ADD_EMPLOYEE)
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -89,7 +90,7 @@ export default function User() {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = appointments.map((n) => n._id);
+            const newSelecteds = ordinations.map((n) => n._id);
             setSelected(newSelecteds);
             return;
         }
@@ -127,20 +128,22 @@ export default function User() {
         setFilterName(event.target.value);
     };
 
-    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - appointments.length) : 0;
+    const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - ordinations.length) : 0;
 
-    const filteredUsers = applySortFilter(appointments, getComparator(order, orderBy), filterName);
+    const filteredUsers = applySortFilter(ordinations, getComparator(order, orderBy), filterName);
 
     const isUserNotFound = filteredUsers.length === 0;
 
     return (
-        <Page title="Termini">
+        <Page title="Ordinacije">
             <Container>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                     <Typography variant="h4" gutterBottom>
-                        Termini
+                        Ordinacije
                     </Typography>
-                    <AddAppointmentDialog title="Novi Termin" />
+                    {allowed &&
+                        <AddOrdinationDialog title="Nova ordinacija" />
+                    }
                 </Stack>
 
                 <Card>
@@ -148,7 +151,7 @@ export default function User() {
                         numSelected={selected.length}
                         filterName={filterName}
                         onFilterName={handleFilterByName}
-                        placeholderRole="Pronađite termin..."
+                        placeholderRole="Pronađite ordinaciju..."
                     />
 
                     <Scrollbar>
@@ -167,13 +170,7 @@ export default function User() {
                                     {filteredUsers
                                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                         .map((row) => {
-                                            const { _id, date, pacientId, pacientName: generatedPacientName } = row;
-                                            const pacientName = `${pacientId.firstName} ${pacientId.lastName}`
-                                            const name = generatedPacientName || pacientName
-                                            // const name = !pacientName.startsWith('undefined') ? pacientName : generatedPacientName
-
-                                            const localeFormatedDate = new Date(date).toLocaleString('bs-BA')
-
+                                            const { _id, name, location, founded } = row;
                                             const isItemSelected = selected.indexOf(_id) !== -1;
 
                                             return (
@@ -199,17 +196,12 @@ export default function User() {
                                                             {name}
                                                         </Typography>
                                                     </TableCell>
-                                                    <TableCell align="left">{localeFormatedDate}</TableCell>
-                                                    <TableCell align="left">pacient@email.com</TableCell>
-                                                    <TableCell align="left">000-000-000</TableCell>
-                                                    <TableCell align="left">
-                                                        Živinice
-                                                    </TableCell>
-
+                                                    <TableCell align="left">{location}</TableCell>
+                                                    <TableCell align="left">{new Date(founded).toLocaleDateString('bs-BA')}</TableCell>
                                                     <TableCell align="right">
                                                         <TableMoreMenu>
-                                                            <EditAppointmentDialog appointmentId={_id} />
-                                                            <DeleteAppointmentDialog appointmentId={_id} />
+                                                            <EditOrdinationDialog ordinationId={_id} />
+                                                            <DeleteOrdinationDialog ordinationId={_id} />
                                                         </TableMoreMenu>
                                                     </TableCell>
                                                 </TableRow>

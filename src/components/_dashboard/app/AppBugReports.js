@@ -1,8 +1,9 @@
+import { usePacientContext } from './../../../context/PacientContext'
 import { Icon } from '@iconify/react';
 import clockHistory from '@iconify/icons-bi/clock-history';
 // material
 import { alpha, styled } from '@mui/material/styles';
-import { Card, Typography } from '@mui/material';
+import { Card, Typography, CircularProgress } from '@mui/material';
 // utils
 import { fShortenNumber } from '../../../utils/formatNumber';
 
@@ -34,15 +35,18 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const TOTAL = 63;
-
 export default function AppBugReports() {
+  const { upcomingAppointments } = usePacientContext()
+
+  const textToShow = upcomingAppointments
+    ? fShortenNumber(upcomingAppointments.length) : <CircularProgress color="error" />
+
   return (
     <RootStyle>
       <IconWrapperStyle>
         <Icon icon={clockHistory} width={24} height={24} />
       </IconWrapperStyle>
-      <Typography variant="h3">{fShortenNumber(TOTAL)}</Typography>
+      <Typography variant="h3">{textToShow}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
         Dolazeći Termini
       </Typography>

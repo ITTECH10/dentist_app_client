@@ -1,3 +1,4 @@
+import { useEmployeeContext } from './../../../context/EmployeeContext'
 import { Icon } from '@iconify/react';
 import ordination from '@iconify/icons-bi/building';
 // material
@@ -34,15 +35,14 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-const TOTAL = 2;
-
 export default function AppNewUsers() {
+  const { ordinations } = useEmployeeContext()
   return (
     <RootStyle>
       <IconWrapperStyle>
         <Icon icon={ordination} width={24} height={24} />
       </IconWrapperStyle>
-      <Typography variant="h3">{fShortenNumber(TOTAL)}</Typography>
+      <Typography variant="h3">{fShortenNumber(ordinations.length)}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
         Ordinacije
       </Typography>

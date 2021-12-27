@@ -42,6 +42,17 @@ export default function EditDiagnosisDialog({ diagnosisId }) {
     const { setGeneralAlertOptions } = useApp()
     const [fields, setFields] = React.useState(initialFields)
 
+    console.log(fields)
+
+    const formData = new FormData()
+    formData.append('photo', fields.image)
+    formData.append('pacientId', fields.selectedPacient)
+    formData.append('date', fields.date)
+    formData.append('summary', fields.summary)
+    formData.append('tooth', fields.tooth)
+    formData.append('ordination', fields.ordination)
+    formData.append('kind', fields.kind)
+
     let updateDiagnosisTimeout
     React.useEffect(() => {
         return () => {
@@ -87,12 +98,18 @@ export default function EditDiagnosisDialog({ diagnosisId }) {
         e.preventDefault();
         setBtnLoading(true)
 
-        axios.put(`/diagnosis/${diagnosisId}`, { ...fields }).then(res => {
+        axios({
+            method: 'PUT',
+            data: formData,
+            headers: { "Content-Type": "application/json" },
+            url: `/diagnosis/${diagnosisId}`
+        }).then(res => {
             if (res.status === 200) {
                 const updatedDiagnosis = [...diagnosis]
                 const updatingDiagnosisIndex = updatedDiagnosis.findIndex(diagnose => diagnose._id === diagnosisId)
                 const foundDiagnosis = updatedDiagnosis[updatingDiagnosisIndex]
 
+                console.log(res.data)
                 // THIS IS A WORKAROUND
                 const pacientToChangeTo = pacients.find(pacient => pacient._id === fields.pacientId)
                 ///////////////////
