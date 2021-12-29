@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { usePacientContext } from './../../../context/PacientContext'
 import { Icon } from '@iconify/react';
 import clockHistory from '@iconify/icons-bi/clock-history';
@@ -36,13 +37,21 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function AppBugReports() {
-  const { upcomingAppointments } = usePacientContext()
+  const { upcomingAppointments, setAppointments } = usePacientContext()
+  const navigate = useNavigate()
 
   const textToShow = upcomingAppointments
     ? fShortenNumber(upcomingAppointments.length) : <CircularProgress color="error" />
 
+  console.log(upcomingAppointments)
+
+  const navigateHandler = () => {
+    setAppointments(upcomingAppointments)
+    navigate('/appointments')
+  }
+
   return (
-    <RootStyle>
+    <RootStyle onClick={navigateHandler}>
       <IconWrapperStyle>
         <Icon icon={clockHistory} width={24} height={24} />
       </IconWrapperStyle>

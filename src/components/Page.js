@@ -13,7 +13,8 @@ const Page = forwardRef(({ children, title = '', ...other }, ref) => {
 
   return (
     <Box ref={ref} {...other}>
-      {authenticated && <Alert />}
+      {/* {authenticated && <Alert />} */}
+      <Alert />
       <Helmet>
         <title>{title}</title>
       </Helmet>

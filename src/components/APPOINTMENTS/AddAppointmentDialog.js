@@ -122,6 +122,7 @@ export default function AddAppointmentModal({ title, pacientId, onlyIcon }) {
                                 label="Datum i vrijeme"
                                 value={fields.date}
                                 required
+                                minDate={fields.date}
                                 ampm={false}
                                 // style={{ minHeight: 200 }}
                                 onChange={(value) => setFields({ ...fields, date: value })}

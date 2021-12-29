@@ -23,7 +23,7 @@ export default function Alerts() {
     };
 
     return (
-        <Stack spacing={2} sx={{ width: '100%' }}>
+        <Stack spacing={2} sx={{ width: '100%', position: 'absolute' }}>
             <Snackbar
                 open={generalAlertOptions.open}
                 onClose={handleClose}

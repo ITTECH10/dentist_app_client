@@ -170,7 +170,6 @@ export default function User() {
                                             const { _id, date, pacientId, pacientName: generatedPacientName } = row;
                                             const pacientName = `${pacientId.firstName} ${pacientId.lastName}`
                                             const name = generatedPacientName || pacientName
-                                            // const name = !pacientName.startsWith('undefined') ? pacientName : generatedPacientName
 
                                             const localeFormatedDate = new Date(date).toLocaleString('bs-BA')
 

@@ -136,6 +136,7 @@ export default function EditAppointmentDialog({ appointmentId }) {
                             <DateTimePicker
                                 label="Datum i vrijeme"
                                 value={fields.date}
+                                minDate={fields.date}
                                 required
                                 ampm={false}
                                 onChange={(value) => setFields({ ...fields, date: value })}

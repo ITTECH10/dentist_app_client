@@ -18,6 +18,8 @@ import Ordinations from './pages/Ordinations';
 import OrdinationsAlt from './pages/OrdinationsAlt';
 import PacientDetails from './pages/PacientDetails';
 import Appointments from './pages/Appointments';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import NotFound from './pages/Page404';
 // ---------------------------------------------------------------------
 
@@ -62,6 +64,8 @@ export default function Router() {
     element: <LogoOnlyLayout />,
     children: [
       { path: 'login', element: <Login /> },
+      { path: '/forgotPassword', element: <ForgotPassword /> },
+      { path: '/resetPassword/:token', element: <ResetPassword /> },
       { path: '404', element: <NotFound /> },
       { path: '/', element: <Navigate to='/login' /> },
       { path: '*', element: <NotFound /> }

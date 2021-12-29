@@ -26,6 +26,7 @@ export default function LoginForm() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const { setAuthenticated, setToken } = useApp()
+  const [btnLoading, setBtnLoading] = useState(false)
 
   const LoginSchema = Yup.object().shape({
     email: Yup.string().email('Molimo vas unesite validnu E-mail adresu.').required('Molimo vas unesite vaš E-mail.'),
@@ -40,9 +41,11 @@ export default function LoginForm() {
     },
     validationSchema: LoginSchema,
     onSubmit: () => {
+      setBtnLoading(true)
       axios.post('/employees/login', { ...values })
         .then(res => {
           if (res.status === 200) {
+            setBtnLoading(false)
             setAuthenticated(true);
             navigate('/dashboard/app')
             // localStorage.setItem('token', JSON.stringify(res.data.token))
@@ -50,11 +53,12 @@ export default function LoginForm() {
           }
         }).catch(err => {
           console.log(err)
+          setBtnLoading(false)
         })
     }
   });
 
-  const { errors, touched, values, isSubmitting, handleSubmit, getFieldProps } = formik;
+  const { errors, touched, values, handleSubmit, getFieldProps } = formik;
 
   const handleShowPassword = () => {
     setShowPassword((show) => !show);
@@ -100,7 +104,7 @@ export default function LoginForm() {
             label="Zapamti me"
           />
 
-          <Link component={RouterLink} variant="subtitle2" to="#">
+          <Link component={RouterLink} variant="subtitle2" to="/forgotPassword">
             Zaboravili ste lozinku?
           </Link>
         </Stack>
@@ -110,7 +114,7 @@ export default function LoginForm() {
           size="large"
           type="submit"
           variant="contained"
-          loading={isSubmitting}
+          loading={btnLoading}
         >
           Prijava
         </LoadingButton>
