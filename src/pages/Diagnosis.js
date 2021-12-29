@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 import { filter } from 'lodash';
 import { useState } from 'react';
 import AddDiagnosisDialog from './../components/DIAGNOSIS/AddDiagnosisDialog'
@@ -73,14 +75,28 @@ function applySortFilter(array, comparator, query) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-export default function User() {
-    const { diagnosis } = usePacientContext()
+export default function Diagnosis() {
+    const { diagnosis, getAllDiagnosis } = usePacientContext()
     const [page, setPage] = useState(0);
     const [order, setOrder] = useState('asc');
     const [selected, setSelected] = useState([]);
     const [orderBy, setOrderBy] = useState('pacientName');
     const [filterName, setFilterName] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(5);
+
+    const deleteMultipleDiagnosis = () => {
+        axios({
+            method: 'DELETE',
+            data: { ids: selected },
+            url: '/diagnosis/deleteMultiple',
+            headers: { "Content-Type": "application/json" }
+        }).then(res => {
+            if (res.status === 204) {
+                getAllDiagnosis()
+                setSelected([])
+            }
+        })
+    }
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -150,6 +166,8 @@ export default function User() {
                         filterName={filterName}
                         onFilterName={handleFilterByName}
                         placeholderRole="Pronađite dijagnozu..."
+                        selectedResourceName="dijagnoza"
+                        clickHandler={deleteMultipleDiagnosis}
                     />
 
                     <Scrollbar>
@@ -171,7 +189,7 @@ export default function User() {
                                             const { _id, date, employeeId, pacientId, pacientName: generatedPacientName, employeeName: generatedEmployeeName, tooth, ordination, kind } = row;
 
                                             const employeeName = generatedEmployeeName || `${employeeId.firstName} ${employeeId.lastName}`
-                                            const pacientName = generatedPacientName || `${pacientId.firstName} ${pacientId.lastName}`
+                                            const pacientName = generatedPacientName || pacientId && `${pacientId.firstName} ${pacientId.lastName}`
 
                                             const localeFormatedDate = new Date(date).toLocaleString('bs-BA')
                                             const isItemSelected = selected.indexOf(_id) !== -1;

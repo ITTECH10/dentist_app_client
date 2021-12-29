@@ -168,9 +168,8 @@ export default function User() {
                                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                         .map((row) => {
                                             const { _id, date, pacientId, pacientName: generatedPacientName } = row;
-                                            const pacientName = `${pacientId.firstName} ${pacientId.lastName}`
+                                            const pacientName = pacientId && `${pacientId.firstName} ${pacientId.lastName}`
                                             const name = generatedPacientName || pacientName
-
                                             const localeFormatedDate = new Date(date).toLocaleString('bs-BA')
 
                                             const isItemSelected = selected.indexOf(_id) !== -1;
