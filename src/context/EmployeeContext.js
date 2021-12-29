@@ -16,7 +16,7 @@ const EmployeeContextProvider = ({ children }) => {
     const [employees, setEmployees] = React.useState([])
     const [logedInEmployee, setLogedInEmployee] = React.useState({})
     const [isSuperAdmin, setIsSuperAdmin] = React.useState(false)
-    const [ordinations, setOrdinations] = React.useState([])
+    const [ordinations, setOrdinations] = React.useState()
 
     const getAllOrdinations = React.useCallback(() => {
         axios('/ordinations')

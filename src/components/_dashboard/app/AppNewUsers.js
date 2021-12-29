@@ -3,7 +3,7 @@ import { Icon } from '@iconify/react';
 import ordination from '@iconify/icons-bi/building';
 // material
 import { alpha, styled } from '@mui/material/styles';
-import { Card, Typography } from '@mui/material';
+import { Card, Typography, CircularProgress } from '@mui/material';
 // utils
 import { fShortenNumber } from '../../../utils/formatNumber';
 
@@ -37,12 +37,16 @@ const IconWrapperStyle = styled('div')(({ theme }) => ({
 
 export default function AppNewUsers() {
   const { ordinations } = useEmployeeContext()
+
+  const textToShow = ordinations
+    ? fShortenNumber(ordinations.length) : <CircularProgress color="error" />
+
   return (
     <RootStyle>
       <IconWrapperStyle>
         <Icon icon={ordination} width={24} height={24} />
       </IconWrapperStyle>
-      <Typography variant="h3">{fShortenNumber(ordinations.length)}</Typography>
+      <Typography variant="h3">{textToShow}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
         Ordinacije
       </Typography>

@@ -45,7 +45,7 @@ ListToolbar.propTypes = {
   onFilterName: PropTypes.func
 };
 
-export default function ListToolbar({ numSelected, filterName, onFilterName, placeholderRole }) {
+export default function ListToolbar({ numSelected, filterName, onFilterName, placeholderRole, clickHandler, selectedResourceName }) {
   return (
     <RootStyle
       sx={{
@@ -57,7 +57,7 @@ export default function ListToolbar({ numSelected, filterName, onFilterName, pla
     >
       {numSelected > 0 ? (
         <Typography component="div" variant="subtitle1">
-          {numSelected} selected
+          Broj označenih {selectedResourceName} ({numSelected})
         </Typography>
       ) : (
         <SearchStyle
@@ -73,8 +73,8 @@ export default function ListToolbar({ numSelected, filterName, onFilterName, pla
       )}
 
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
+        <Tooltip title="Obriši">
+          <IconButton onClick={clickHandler}>
             <Icon icon={trash2Fill} />
           </IconButton>
         </Tooltip>

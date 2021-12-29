@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { usePacientContext } from './../context/PacientContext'
 import PropTypes from 'prop-types';
 import { Icon } from '@iconify/react';
 import { NavLink as RouterLink, matchPath, useLocation } from 'react-router-dom';
@@ -51,9 +52,20 @@ NavItem.propTypes = {
 
 function NavItem({ item, active }) {
   const theme = useTheme();
+  const { getAllAppointments } = usePacientContext()
   const isActiveRoot = active(item.path);
   const { title, path, icon, info, children } = item;
   const [open, setOpen] = useState(isActiveRoot);
+
+  // NEED BETTER SOLUTION // MAYBE NOT // TO PREVENT CONTINOUS 
+  // API CALLS WHEN CLICKING THE NAV ITEM... CONSIDER PIECE OF STATE
+  const pathSwitchHandler = () => {
+    switch (path) {
+      case '/appointments': {
+        getAllAppointments()
+      }
+    }
+  }
 
   const handleOpen = () => {
     setOpen((prev) => !prev);
@@ -137,6 +149,7 @@ function NavItem({ item, active }) {
   return (
     <ListItemStyle
       component={RouterLink}
+      onClick={pathSwitchHandler}
       to={path}
       sx={{
         ...(isActiveRoot && activeRootStyle)

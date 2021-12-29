@@ -70,7 +70,6 @@ const PacientContextProvider = ({ children }) => {
         }).catch(err => console.log(err))
     }, [])
 
-
     const value = {
         getAllPacients,
         pacients,

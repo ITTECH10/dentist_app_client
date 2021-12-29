@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 import { useNavigate } from 'react-router-dom'
 import { filter } from 'lodash';
 import { useState } from 'react';
@@ -76,13 +78,27 @@ function applySortFilter(array, comparator, query) {
 
 export default function User() {
   const navigate = useNavigate()
-  const { pacients, getSelectedPacient } = usePacientContext()
+  const { pacients, getSelectedPacient, getAllPacients } = usePacientContext()
   const [page, setPage] = useState(0);
   const [order, setOrder] = useState('asc');
   const [selected, setSelected] = useState([]);
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const deleteMultiplePacients = () => {
+    axios({
+      method: 'DELETE',
+      data: { ids: selected },
+      url: '/pacients/deleteMultiple',
+      headers: { "Content-Type": "application/json" }
+    }).then(res => {
+      if (res.status === 204) {
+        getAllPacients()
+        setSelected([])
+      }
+    })
+  }
 
   const handlePacientNavigation = (id) => {
     getSelectedPacient(id)
@@ -97,7 +113,7 @@ export default function User() {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelecteds = pacients.map((n) => `${n.firstName} ${n.lastName}`);
+      const newSelecteds = pacients.map((n) => n._id);
       setSelected(newSelecteds);
       return;
     }
@@ -154,9 +170,12 @@ export default function User() {
         <Card>
           <UserListToolbar
             numSelected={selected.length}
+            selected={selected}
             filterName={filterName}
             onFilterName={handleFilterByName}
             placeholderRole="Pronađite pacijenta..."
+            clickHandler={deleteMultiplePacients}
+            selectedResourceName="pacijenata"
           />
 
           <Scrollbar>
@@ -180,7 +199,7 @@ export default function User() {
                       const status = checked ? 'Pregledan' : 'Nepregledan'
                       const formatedGender = gender === 'male' ? 'Muško' : 'Žensko'
                       const avatarUrl = gender === 'female' ? '/static/mock-images/avatars/pacient_female_default.png' : '/static/mock-images/avatars/pacient_male_default.png'
-                      const isItemSelected = selected.indexOf(name) !== -1;
+                      const isItemSelected = selected.indexOf(_id) !== -1;
 
                       return (
                         <TableRow
@@ -197,7 +216,7 @@ export default function User() {
                           >
                             <Checkbox
                               checked={isItemSelected}
-                              onChange={(event) => handleClick(event, name)}
+                              onChange={(event) => handleClick(event, _id)}
                             />
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none" onClick={() => handlePacientNavigation(_id)}>

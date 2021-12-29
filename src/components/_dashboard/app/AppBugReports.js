@@ -43,8 +43,6 @@ export default function AppBugReports() {
   const textToShow = upcomingAppointments
     ? fShortenNumber(upcomingAppointments.length) : <CircularProgress color="error" />
 
-  console.log(upcomingAppointments)
-
   const navigateHandler = () => {
     setAppointments(upcomingAppointments)
     navigate('/appointments')
