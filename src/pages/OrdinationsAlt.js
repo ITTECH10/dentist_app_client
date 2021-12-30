@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 import { filter } from 'lodash';
 import { useState } from 'react';
 import AddOrdinationDialog from './../components/ORDINATIONS/AddOrdinationDialog'
@@ -73,7 +75,7 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function User() {
-    const { ordinations, logedInEmployee } = useEmployeeContext()
+    const { ordinations, logedInEmployee, getAllOrdinations } = useEmployeeContext()
     const [page, setPage] = useState(0);
     const [order, setOrder] = useState('asc');
     const [selected, setSelected] = useState([]);
@@ -81,6 +83,20 @@ export default function User() {
     const [filterName, setFilterName] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const allowed = hasPermission(logedInEmployee, actions.ADD_EMPLOYEE)
+
+    const deleteMultipleOrdinations = () => {
+        axios({
+            method: 'DELETE',
+            data: { ids: selected },
+            url: '/ordinations/deleteMultiple',
+            headers: { "Content-Type": "application/json" }
+        }).then(res => {
+            if (res.status === 204) {
+                getAllOrdinations()
+                setSelected([])
+            }
+        })
+    }
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -152,6 +168,8 @@ export default function User() {
                         filterName={filterName}
                         onFilterName={handleFilterByName}
                         placeholderRole="Pronađite ordinaciju..."
+                        selectedResourceName="ordinacija"
+                        clickHandler={deleteMultipleOrdinations}
                     />
 
                     <Scrollbar>
