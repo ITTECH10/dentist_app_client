@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 import { filter } from 'lodash';
 import { useState } from 'react';
 import AddAppointmentDialog from './../components/APPOINTMENTS/AddAppointmentDialog'
@@ -73,13 +75,27 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function User() {
-    const { appointments } = usePacientContext()
+    const { appointments, getAllAppointments } = usePacientContext()
     const [page, setPage] = useState(0);
     const [order, setOrder] = useState('asc');
     const [selected, setSelected] = useState([]);
     const [orderBy, setOrderBy] = useState('pacientName');
     const [filterName, setFilterName] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(5);
+
+    const deleteMultipleAppointments = () => {
+        axios({
+            method: 'DELETE',
+            data: { ids: selected },
+            url: '/appointments/deleteMultiple',
+            headers: { "Content-Type": "application/json" }
+        }).then(res => {
+            if (res.status === 204) {
+                getAllAppointments()
+                setSelected([])
+            }
+        })
+    }
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -149,6 +165,8 @@ export default function User() {
                         filterName={filterName}
                         onFilterName={handleFilterByName}
                         placeholderRole="Pronađite termin..."
+                        selectedResourceName="termina"
+                        clickHandler={deleteMultipleAppointments}
                     />
 
                     <Scrollbar>

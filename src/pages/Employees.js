@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 import { filter } from 'lodash';
 import { useState } from 'react';
 import AddEmployeeDialog from './../components/EMPLOYEES/AddEmployeeDialog'
@@ -75,7 +77,7 @@ function applySortFilter(array, comparator, query) {
 }
 
 export default function User() {
-    const { employees, logedInEmployee } = useEmployeeContext()
+    const { employees, logedInEmployee, getAllEmployees } = useEmployeeContext()
     const [page, setPage] = useState(0);
     const [order, setOrder] = useState('asc');
     const [selected, setSelected] = useState([]);
@@ -83,6 +85,20 @@ export default function User() {
     const [filterName, setFilterName] = useState('');
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const allowed = hasPermission(logedInEmployee, actions.ADD_EMPLOYEE)
+
+    const deleteMultipleEmployees = () => {
+        axios({
+            method: 'DELETE',
+            data: { ids: selected },
+            url: '/employees/deleteMultiple',
+            headers: { "Content-Type": "application/json" }
+        }).then(res => {
+            if (res.status === 204) {
+                getAllEmployees()
+                setSelected([])
+            }
+        })
+    }
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -92,7 +108,7 @@ export default function User() {
 
     const handleSelectAllClick = (event) => {
         if (event.target.checked) {
-            const newSelecteds = employees.map((n) => `${n.firstName} ${n.lastName}`);
+            const newSelecteds = employees.map((n) => n._id);
             setSelected(newSelecteds);
             return;
         }
@@ -154,6 +170,8 @@ export default function User() {
                         filterName={filterName}
                         onFilterName={handleFilterByName}
                         placeholderRole="Pronađite zaposlenika..."
+                        selectedResourceName="zaposlenika"
+                        clickHandler={deleteMultipleEmployees}
                     />
 
                     <Scrollbar>
@@ -177,7 +195,7 @@ export default function User() {
                                             const status = checked ? 'Pregledan' : 'Nepregledan'
                                             const formatedGender = gender === 'male' ? 'Muško' : 'Žensko'
                                             const avatarUrl = gender === 'female' ? '/static/mock-images/avatars/pacient_female_default.png' : '/static/mock-images/avatars/pacient_male_default.png'
-                                            const isItemSelected = selected.indexOf(name) !== -1;
+                                            const isItemSelected = selected.indexOf(_id) !== -1;
 
                                             return (
                                                 <TableRow
@@ -194,7 +212,7 @@ export default function User() {
                                                     >
                                                         <Checkbox
                                                             checked={isItemSelected}
-                                                            onChange={(event) => handleClick(event, name)}
+                                                            onChange={(event) => handleClick(event, _id)}
                                                         />
                                                     </TableCell>
                                                     {/* <TableCell component="th" scope="row" padding="none" onClick={() => handlePacientNavigation(_id)}> */}
