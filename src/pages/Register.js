@@ -88,7 +88,7 @@ export default function Register() {
           <MHidden width="smUp">
             <Typography variant="subtitle2" sx={{ mt: 3, textAlign: 'center' }}>
               Već imate račun?&nbsp;
-              <Link to="/login" component={RouterLink}>
+              <Link to="/" component={RouterLink}>
                 Prijava
               </Link>
             </Typography>

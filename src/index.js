@@ -1,5 +1,6 @@
 // scroll bar
 import 'simplebar/src/simplebar.css';
+import ErrorBoundary from './layouts/ErrorBoundary'
 
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
@@ -30,7 +31,9 @@ ReactDOM.render(
       <EmployeeContextProvider>
         <PacientContextProvider>
           <HelmetProvider>
-            <App />
+            <ErrorBoundary>
+              <App />
+            </ErrorBoundary>
           </HelmetProvider>
         </PacientContextProvider>
       </EmployeeContextProvider>

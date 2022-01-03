@@ -75,7 +75,7 @@ export default function ForgotPasswordForm() {
                 >
                     Gotovo
                 </LoadingButton>
-                <Link sx={{ display: 'inline-block', mt: .5 }} variant="subtitle2" component={RouterLink} to="/login">
+                <Link sx={{ display: 'inline-block', mt: .5 }} variant="subtitle2" component={RouterLink} to="/">
                     Vrati se nazad
                 </Link>
             </Form>

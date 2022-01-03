@@ -33,7 +33,7 @@ const AppContextProvider = ({ children }) => {
                 if (res.status === 200) {
                     setAuthenticated(false)
                     setAppLoading(false)
-                    navigate('/login')
+                    navigate('/')
                 }
             }).catch(err => console.error(err))
     }, [setToken])

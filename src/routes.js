@@ -73,11 +73,11 @@ export default function Router() {
         <LogoOnlyLayout />
       </Suspense>,
     children: [
-      { path: 'login', element: <Login /> },
+      { path: '/', element: <Login /> },
       { path: '/forgotPassword', element: <ForgotPassword /> },
       { path: '/resetPassword/:token', element: <ResetPassword /> },
       { path: '404', element: <NotFound /> },
-      { path: '/', element: <Navigate to='/login' /> },
+      // { path: '/', element: <Navigate to='/' /> },
       { path: '*', element: <NotFound /> }
     ]
   }

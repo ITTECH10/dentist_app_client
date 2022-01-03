@@ -52,7 +52,8 @@ export default function LoginForm() {
             setToken(res.data.token)
           }
         }).catch(err => {
-          console.log(err)
+          errors.email = err.response.data.message
+          errors.password = err.response.data.message
           setBtnLoading(false)
         })
     }
