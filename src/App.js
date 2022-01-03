@@ -58,11 +58,12 @@ export default function App() {
   ])
 
   return (
-    <ThemeConfig>
-      <ScrollToTop />
-      <GlobalStyles />
-      <BaseOptionChartStyle />
-      <Router />
-    </ThemeConfig>
+    !appLoading ?
+      <ThemeConfig>
+        <ScrollToTop />
+        <GlobalStyles />
+        <BaseOptionChartStyle />
+        <Router />
+      </ThemeConfig> : <Loader />
   );
 }
