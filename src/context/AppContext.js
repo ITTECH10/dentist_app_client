@@ -24,7 +24,7 @@ const AppContextProvider = ({ children }) => {
     })
 
     // CONTINUE WORKING FROM HERE
-    const logout = () => {
+    const logout = React.useCallback(() => {
         setAppLoading(true)
         localStorage.removeItem('token')
         setToken(false)
@@ -32,14 +32,11 @@ const AppContextProvider = ({ children }) => {
             .then(res => {
                 if (res.status === 200) {
                     setAuthenticated(false)
-
-                    setTimeout(() => {
-                        setAppLoading(false)
-                        navigate('/login')
-                    }, 2000)
+                    setAppLoading(false)
+                    navigate('/login')
                 }
             }).catch(err => console.error(err))
-    }
+    }, [setToken])
 
     const value = {
         authenticated,

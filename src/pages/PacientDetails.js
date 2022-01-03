@@ -21,7 +21,7 @@ const PacientDetails = () => {
         if (!_id) {
             getSelectedPacient(pacientId)
         }
-    }, [_id, getSelectedPacient])
+    }, [_id, getSelectedPacient, pacientId])
 
     return (
         <Page title="Pacijent Detalji">

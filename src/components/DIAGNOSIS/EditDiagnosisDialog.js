@@ -42,8 +42,6 @@ export default function EditDiagnosisDialog({ diagnosisId }) {
     const { setGeneralAlertOptions } = useApp()
     const [fields, setFields] = React.useState(initialFields)
 
-    console.log(fields)
-
     const formData = new FormData()
     formData.append('photo', fields.image)
     formData.append('pacientId', fields.selectedPacient)
@@ -52,13 +50,6 @@ export default function EditDiagnosisDialog({ diagnosisId }) {
     formData.append('tooth', fields.tooth)
     formData.append('ordination', fields.ordination)
     formData.append('kind', fields.kind)
-
-    let updateDiagnosisTimeout
-    React.useEffect(() => {
-        return () => {
-            clearTimeout(updateDiagnosisTimeout)
-        }
-    }, [])
 
     const autoCompletePacients = pacients.map(pacient => {
         return {
@@ -109,7 +100,6 @@ export default function EditDiagnosisDialog({ diagnosisId }) {
                 const updatingDiagnosisIndex = updatedDiagnosis.findIndex(diagnose => diagnose._id === diagnosisId)
                 const foundDiagnosis = updatedDiagnosis[updatingDiagnosisIndex]
 
-                console.log(res.data)
                 // THIS IS A WORKAROUND
                 const pacientToChangeTo = pacients.find(pacient => pacient._id === fields.pacientId)
                 ///////////////////

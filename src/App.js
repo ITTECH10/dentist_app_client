@@ -53,16 +53,16 @@ export default function App() {
     getAllAppointments,
     getAllDiagnosis,
     getAllOrdinations,
-    getUpcomingAppointments
+    getUpcomingAppointments,
+    logout
   ])
 
   return (
-    !appLoading ?
-      <ThemeConfig>
-        <ScrollToTop />
-        <GlobalStyles />
-        <BaseOptionChartStyle />
-        <Router />
-      </ThemeConfig> : <Loader />
+    <ThemeConfig>
+      <ScrollToTop />
+      <GlobalStyles />
+      <BaseOptionChartStyle />
+      <Router />
+    </ThemeConfig>
   );
 }

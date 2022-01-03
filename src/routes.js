@@ -1,27 +1,31 @@
+// import Products from './pages/Products';
+// import Blog from './pages/Blog';
+// import Ordinations from './pages/Ordinations';
+import { Suspense, lazy } from 'react'
+import Loader from './components/Loader/Loader'
+
 import { Navigate, useRoutes } from 'react-router-dom';
 import { useApp } from './context/AppContext'
 import { useEmployeeContext } from './context/EmployeeContext'
 import { hasPermission, actions } from './utils/DataProviders/ROLES/permissions'
+// const AvatarComponent = lazy(() => import('./AvatarComponent'));
 
 // layouts
 import DashboardLayout from './layouts/dashboard';
 import LogoOnlyLayout from './layouts/LogoOnlyLayout';
-//
-import Login from './pages/Login';
-import Employees from './pages/Employees';
-import DashboardApp from './pages/DashboardApp';
-import Products from './pages/Products';
-import Blog from './pages/Blog';
-import User from './pages/User';
-import Diagnosis from './pages/Diagnosis';
-import Ordinations from './pages/Ordinations';
-import OrdinationsAlt from './pages/OrdinationsAlt';
-import PacientDetails from './pages/PacientDetails';
-import Appointments from './pages/Appointments';
-import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword';
-import NotFound from './pages/Page404';
 // ---------------------------------------------------------------------
+
+const Login = lazy(() => import('./pages/Login'))
+const DashboardApp = lazy(() => import('./pages/DashboardApp'))
+const User = lazy(() => import('./pages/User'))
+const Diagnosis = lazy(() => import('./pages/Diagnosis'))
+const OrdinationsAlt = lazy(() => import('./pages/OrdinationsAlt'))
+const Employees = lazy(() => import('./pages/Employees'))
+const PacientDetails = lazy(() => import('./pages/PacientDetails'))
+const Appointments = lazy(() => import('./pages/Appointments'))
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'))
+const ResetPassword = lazy(() => import('./pages/ResetPassword'))
+const NotFound = lazy(() => import('./pages/Page404'))
 
 export default function Router() {
   const { authenticated } = useApp()
@@ -55,13 +59,19 @@ export default function Router() {
 
   let authenticatedConfig = {
     path: '/',
-    element: <DashboardLayout />,
+    element:
+      <Suspense fallback={<Loader />}>
+        <DashboardLayout />
+      </Suspense>,
     children: match ? MAIN_ROLE_ROUTING : SUB_ROLE_ROUTING
   }
 
   let nonAuthConfig = {
     path: '/',
-    element: <LogoOnlyLayout />,
+    element:
+      <Suspense fallback={<Loader />}>
+        <LogoOnlyLayout />
+      </Suspense>,
     children: [
       { path: 'login', element: <Login /> },
       { path: '/forgotPassword', element: <ForgotPassword /> },

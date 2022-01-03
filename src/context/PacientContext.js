@@ -41,7 +41,7 @@ const PacientContextProvider = ({ children }) => {
                     navigate(`/pacients/${id}`)
                 }
             }).catch(err => console.log(err.response))
-    }, [selectedPacient])
+    }, [selectedPacient, setAppLoading])
 
     const getAllAppointments = React.useCallback(() => {
         axios('/appointments').then(res => {

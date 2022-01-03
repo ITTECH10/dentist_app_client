@@ -61,9 +61,11 @@ function NavItem({ item, active }) {
   // API CALLS WHEN CLICKING THE NAV ITEM... CONSIDER PIECE OF STATE
   const pathSwitchHandler = () => {
     switch (path) {
-      case '/appointments': {
+      case '/appointments':
         getAllAppointments()
-      }
+        break;
+
+      default: return
     }
   }
 

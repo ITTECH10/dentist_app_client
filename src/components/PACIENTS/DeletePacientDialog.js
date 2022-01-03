@@ -27,13 +27,6 @@ export default function DeletePacientDialog({ pacientId }) {
     const { setGeneralAlertOptions } = useApp()
     const { pacients, setPacients } = usePacientContext()
 
-    let deletePacientTimeout
-    React.useEffect(() => {
-        return () => {
-            clearTimeout(deletePacientTimeout)
-        }
-    }, [])
-
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -51,17 +44,15 @@ export default function DeletePacientDialog({ pacientId }) {
                 if (res.status === 204) {
                     const updatedPacients = pacients.filter(pacient => pacient._id !== pacientId)
 
-                    deletePacientTimeout = setTimeout(() => {
-                        setBtnLoading(false)
-                        setPacients(updatedPacients)
-                        setOpen(false)
-                        setGeneralAlertOptions({
-                            open: true,
-                            message: 'Uspješno ste obrisali pacijenta!',
-                            severity: 'success',
-                            hideAfter: 5000
-                        })
-                    }, 1000)
+                    setBtnLoading(false)
+                    setPacients(updatedPacients)
+                    setOpen(false)
+                    setGeneralAlertOptions({
+                        open: true,
+                        message: 'Uspješno ste obrisali pacijenta!',
+                        severity: 'success',
+                        hideAfter: 5000
+                    })
                 }
             })
     }

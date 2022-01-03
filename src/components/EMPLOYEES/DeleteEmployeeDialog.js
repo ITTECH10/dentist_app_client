@@ -30,13 +30,6 @@ export default function DeleteEmployeeDialog({ employeeId }) {
     const { employees, setEmployees, logedInEmployee } = useEmployeeContext()
     const allowedRendering = hasPermission(logedInEmployee, actions.DELETE_EMPLOYEE)
 
-    let deleteEmployeeTimeout
-    React.useEffect(() => {
-        return () => {
-            clearTimeout(deleteEmployeeTimeout)
-        }
-    }, [])
-
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -54,17 +47,15 @@ export default function DeleteEmployeeDialog({ employeeId }) {
                 if (res.status === 204) {
                     const updatedEmployees = employees.filter(employee => employee._id !== employeeId)
 
-                    deleteEmployeeTimeout = setTimeout(() => {
-                        setBtnLoading(false)
-                        setEmployees(updatedEmployees)
-                        setOpen(false)
-                        setGeneralAlertOptions({
-                            open: true,
-                            message: 'Uspješno ste obrisali zaposlenika!',
-                            severity: 'success',
-                            hideAfter: 5000
-                        })
-                    }, 1000)
+                    setBtnLoading(false)
+                    setEmployees(updatedEmployees)
+                    setOpen(false)
+                    setGeneralAlertOptions({
+                        open: true,
+                        message: 'Uspješno ste obrisali zaposlenika!',
+                        severity: 'success',
+                        hideAfter: 5000
+                    })
                 }
             })
     }

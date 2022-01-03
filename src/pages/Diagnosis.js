@@ -189,7 +189,7 @@ export default function Diagnosis() {
                                             const { _id, date, employeeId, pacientId, pacientName: generatedPacientName, employeeName: generatedEmployeeName, tooth, ordination, kind } = row;
 
                                             const employeeName = generatedEmployeeName || `${employeeId.firstName} ${employeeId.lastName}`
-                                            const pacientName = generatedPacientName || pacientId && `${pacientId.firstName} ${pacientId.lastName}`
+                                            const pacientName = (generatedPacientName) || (pacientId && `${pacientId.firstName} ${pacientId.lastName}`)
 
                                             const localeFormatedDate = new Date(date).toLocaleString('bs-BA')
                                             const isItemSelected = selected.indexOf(_id) !== -1;

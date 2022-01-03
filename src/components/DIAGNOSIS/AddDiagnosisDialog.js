@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { usePacientContext } from '../../context/PacientContext'
-import { useEmployeeContext } from '../../context/EmployeeContext'
 import { useApp } from '../../context/AppContext'
 import axios from 'axios';
 
@@ -37,7 +36,6 @@ export default function AddDiagnosisDialog({ title, pacientId, onlyIcon }) {
     const [btnLoading, setBtnLoading] = React.useState(false)
     const [fields, setFields] = React.useState(initialFields)
     const { pacients, diagnosis, setDiagnosis } = usePacientContext()
-    const { logedInEmployee } = useEmployeeContext()
     const { setGeneralAlertOptions } = useApp()
     const disabledSubmitCheck = (Object.values(fields).slice(1, 7).some(field => field === '') && !pacientId) || (Object.values(fields).slice(2, 7).some(field => field === '') && pacientId)
 

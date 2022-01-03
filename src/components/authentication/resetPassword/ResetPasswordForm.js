@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import { useState } from 'react';
-import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useFormik, Form, FormikProvider } from 'formik';
 import { Icon } from '@iconify/react';
 import eyeFill from '@iconify/icons-eva/eye-fill';
@@ -10,13 +10,10 @@ import { useApp } from './../../../context/AppContext'
 
 // material
 import {
-    Link,
     Stack,
-    Checkbox,
     TextField,
     IconButton,
-    InputAdornment,
-    FormControlLabel
+    InputAdornment
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 

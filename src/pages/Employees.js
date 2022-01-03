@@ -10,7 +10,6 @@ import {
     Table,
     Stack,
     Avatar,
-    Button,
     Checkbox,
     TableRow,
     TableBody,
@@ -33,6 +32,7 @@ import DeleteEmployeeDialog from './../components/EMPLOYEES/DeleteEmployeeDialog
 //
 import USERLIST from '../_mocks_/user';
 import { hasPermission, actions } from './../utils/DataProviders/ROLES/permissions'
+import { manipulateCloudinaryImage } from './../utils/manipulateCloudinaryImage'
 
 // ----------------------------------------------------------------------
 
@@ -191,9 +191,8 @@ export default function User() {
                                         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                         .map((row) => {
                                             const name = row.firstName + ' ' + row.lastName
-                                            const { _id, birthDate, role, phone, gender, employeeImage, checked, email, ordination } = row;
-                                            const status = checked ? 'Pregledan' : 'Nepregledan'
-                                            const formatedGender = gender === 'male' ? 'Muško' : 'Žensko'
+                                            const { _id, phone, role, gender, employeeImage, email } = row;
+                                            const manipulatedEmployeeImage = manipulateCloudinaryImage(employeeImage)
                                             const avatarUrl = gender === 'female' ? '/static/mock-images/avatars/pacient_female_default.png' : '/static/mock-images/avatars/pacient_male_default.png'
                                             const isItemSelected = selected.indexOf(_id) !== -1;
 
@@ -218,7 +217,7 @@ export default function User() {
                                                     {/* <TableCell component="th" scope="row" padding="none" onClick={() => handlePacientNavigation(_id)}> */}
                                                     <TableCell component="th" scope="row" padding="none">
                                                         <Stack direction="row" alignItems="center" spacing={2}>
-                                                            <Avatar alt={name} src={!employeeImage ? avatarUrl : employeeImage} />
+                                                            <Avatar alt={name} src={!employeeImage ? avatarUrl : manipulatedEmployeeImage} />
                                                             <Typography variant="subtitle2" noWrap>
                                                                 {name}
                                                             </Typography>

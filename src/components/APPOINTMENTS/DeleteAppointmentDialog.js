@@ -27,13 +27,6 @@ export default function DeleteAppointmentDialog({ appointmentId }) {
     const { setGeneralAlertOptions } = useApp()
     const { appointments, setAppointments } = usePacientContext()
 
-    let deleteAppointmentTimeout
-    React.useEffect(() => {
-        return () => {
-            clearTimeout(deleteAppointmentTimeout)
-        }
-    }, [])
-
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -51,17 +44,15 @@ export default function DeleteAppointmentDialog({ appointmentId }) {
                 if (res.status === 204) {
                     const updatedAppointments = appointments.filter(appointment => appointment._id !== appointmentId)
 
-                    deleteAppointmentTimeout = setTimeout(() => {
-                        setBtnLoading(false)
-                        setAppointments(updatedAppointments)
-                        setOpen(false)
-                        setGeneralAlertOptions({
-                            open: true,
-                            message: 'Uspješno ste obrisali termin!',
-                            severity: 'success',
-                            hideAfter: 5000
-                        })
-                    }, 1000)
+                    setBtnLoading(false)
+                    setAppointments(updatedAppointments)
+                    setOpen(false)
+                    setGeneralAlertOptions({
+                        open: true,
+                        message: 'Uspješno ste obrisali termin!',
+                        severity: 'success',
+                        hideAfter: 5000
+                    })
                 }
             })
     }

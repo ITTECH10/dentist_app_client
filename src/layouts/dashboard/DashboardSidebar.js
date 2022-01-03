@@ -14,6 +14,7 @@ import { MHidden } from '../../components/@material-extend';
 import { hasPermission, actions } from './../../utils/DataProviders/ROLES/permissions'
 import { mainRolesSidebarConfig, subRolesSidebarConfig } from './SidebarConfig';
 import account from '../../_mocks_/account';
+import { manipulateCloudinaryImage } from './../../utils/manipulateCloudinaryImage'
 
 // ----------------------------------------------------------------------
 
@@ -45,6 +46,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
   const { pathname } = useLocation();
   const { logedInEmployee } = useEmployeeContext()
   const { gender, firstName, lastName, role, employeeImage } = logedInEmployee
+  const manipulatedEmployeeImage = manipulateCloudinaryImage(employeeImage)
 
   const entireSidebarVisible = hasPermission(logedInEmployee, actions.MAIN_ROLE_UI_VISIBILITY)
   const defaultAvatar = gender === 'male' ? account.maleDentistAvatar : account.femaleDentistAvatar
@@ -75,7 +77,7 @@ export default function DashboardSidebar({ isOpenSidebar, onCloseSidebar }) {
       <Box sx={{ mb: 5, mx: 2.5 }}>
         <Link underline="none" component={RouterLink} to="#">
           <AccountStyle>
-            <Avatar src={employeeImage ? employeeImage : defaultAvatar} alt="dentist" />
+            <Avatar src={employeeImage ? manipulatedEmployeeImage : defaultAvatar} alt="dentist" />
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
                 {`${firstName} ${lastName}`}

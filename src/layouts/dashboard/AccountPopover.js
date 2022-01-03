@@ -13,6 +13,7 @@ import { Button, Box, Divider, MenuItem, Typography, Avatar, IconButton } from '
 import MenuPopover from '../../components/MenuPopover';
 //
 import account from '../../_mocks_/account';
+import { manipulateCloudinaryImage } from './../../utils/manipulateCloudinaryImage'
 
 // ----------------------------------------------------------------------
 
@@ -44,6 +45,7 @@ export default function AccountPopover() {
   const { gender, firstName, lastName, email, employeeImage } = logedInEmployee
 
   const defaultAvatar = gender === 'male' ? account.maleDentistAvatar : account.femaleDentistAvatar
+  const manipulatedEmployeeImage = manipulateCloudinaryImage(employeeImage)
 
   const handleOpen = () => {
     setOpen(true);
@@ -74,7 +76,7 @@ export default function AccountPopover() {
           })
         }}
       >
-        <Avatar src={employeeImage ? employeeImage : defaultAvatar} alt="dentist" />
+        <Avatar src={employeeImage ? manipulatedEmployeeImage : defaultAvatar} alt="dentist" />
       </IconButton>
 
       <MenuPopover

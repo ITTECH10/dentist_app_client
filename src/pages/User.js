@@ -33,6 +33,7 @@ import EditPacientDialog from './../components/PACIENTS/EditPacientDialog'
 
 //
 import USERLIST from '../_mocks_/user';
+import { manipulateCloudinaryImage } from '../utils/manipulateCloudinaryImage'
 
 // ----------------------------------------------------------------------
 
@@ -195,7 +196,8 @@ export default function User() {
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((row) => {
                       const name = row.firstName + ' ' + row.lastName
-                      const { _id, birthDate, role, phone, gender, pacientImage, checked } = row;
+                      const { _id, birthDate, phone, gender, pacientImage, checked } = row;
+                      const manipulatedPacientImage = manipulateCloudinaryImage(pacientImage)
                       const status = checked ? 'Pregledan' : 'Nepregledan'
                       const formatedGender = gender === 'male' ? 'Muško' : 'Žensko'
                       const avatarUrl = gender === 'female' ? '/static/mock-images/avatars/pacient_female_default.png' : '/static/mock-images/avatars/pacient_male_default.png'
@@ -221,7 +223,7 @@ export default function User() {
                           </TableCell>
                           <TableCell component="th" scope="row" padding="none" onClick={() => handlePacientNavigation(_id)}>
                             <Stack direction="row" alignItems="center" spacing={2}>
-                              <Avatar alt={name} src={!pacientImage ? avatarUrl : pacientImage} />
+                              <Avatar alt={name} src={!pacientImage ? avatarUrl : manipulatedPacientImage} />
                               <Typography variant="subtitle2" noWrap>
                                 {name}
                               </Typography>

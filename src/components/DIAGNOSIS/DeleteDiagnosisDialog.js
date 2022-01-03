@@ -27,13 +27,6 @@ export default function DeleteDiagnosisDialog({ diagnosisId }) {
     const { setGeneralAlertOptions } = useApp()
     const { diagnosis, setDiagnosis, selectedPacient, setSelectedPacient } = usePacientContext()
 
-    let deleteDiagnosisTimeout
-    React.useEffect(() => {
-        return () => {
-            clearTimeout(deleteDiagnosisTimeout)
-        }
-    }, [])
-
     const handleClickOpen = () => {
         setOpen(true);
     };

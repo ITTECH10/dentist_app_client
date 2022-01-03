@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios'
 import { useEmployeeContext } from './../context/EmployeeContext'
 
 // material
@@ -7,18 +6,18 @@ import { Box, Grid, Container, Typography } from '@mui/material';
 // components
 import Page from '../components/Page';
 import {
-  AppTasks,
+  // AppTasks,
   AppNewUsers,
   AppBugReports,
   AppItemOrders,
-  AppNewsUpdate,
+  // AppNewsUpdate,
   AppWeeklySales,
-  AppOrderTimeline,
-  AppCurrentVisits,
-  AppWebsiteVisits,
-  AppTrafficBySite,
-  AppCurrentSubject,
-  AppConversionRates
+  // AppOrderTimeline,
+  // AppCurrentVisits,
+  // AppWebsiteVisits,
+  // AppTrafficBySite,
+  // AppCurrentSubject,
+  // AppConversionRates
 } from '../components/_dashboard/app';
 
 import ActionButton from '../components/_reusable/ActionButton';

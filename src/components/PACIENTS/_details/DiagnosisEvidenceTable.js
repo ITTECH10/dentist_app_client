@@ -73,8 +73,6 @@ export default function User() {
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const diagnosis = selectedPacient.diagnosis || []
 
-    // console.log(selectedPacient)
-
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
@@ -151,8 +149,7 @@ export default function User() {
                             {filteredUsers
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((row) => {
-                                    const name = row.firstName + ' ' + row.lastName
-                                    const { _id, tooth, ordination, image, kind, pacientId, employeeId, date } = row;
+                                    const { _id, tooth, ordination, kind, employeeId, date } = row;
                                     const formatedDate = new Date(date).toLocaleString('bs-BA')
                                     const employeeName = `${employeeId.firstName} ${employeeId.lastName}`
 

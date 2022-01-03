@@ -1,4 +1,3 @@
-import { useApp } from './../context/AppContext'
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import { forwardRef } from 'react';
@@ -9,8 +8,6 @@ import Alert from './_reusable/Alert'
 // ----------------------------------------------------------------------
 
 const Page = forwardRef(({ children, title = '', ...other }, ref) => {
-  const { authenticated } = useApp()
-
   return (
     <Box ref={ref} {...other}>
       {/* {authenticated && <Alert />} */}

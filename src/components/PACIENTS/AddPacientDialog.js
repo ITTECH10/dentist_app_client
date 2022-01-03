@@ -55,13 +55,6 @@ export default function AddPacientModal({ onlyIcon }) {
     formData.append('phone', fields.phone)
     formData.append('photo', fields.pacientImage)
 
-    let addPacientTimeout
-    React.useEffect(() => {
-        return () => {
-            clearTimeout(addPacientTimeout)
-        }
-    }, [addPacientTimeout])
-
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -90,17 +83,15 @@ export default function AddPacientModal({ onlyIcon }) {
         }).then(res => {
             if (res.status === 201) {
                 const updatedPacients = [...pacients, { ...res.data.pacient }]
-                addPacientTimeout = setTimeout(() => {
-                    setPacients(updatedPacients)
-                    setBtnLoading(false)
-                    setOpen(false)
-                    setGeneralAlertOptions({
-                        open: true,
-                        message: 'Uspješno ste dodali pacijenta!',
-                        severity: 'success',
-                        hideAfter: 5000
-                    })
-                }, 1000)
+                setPacients(updatedPacients)
+                setBtnLoading(false)
+                setOpen(false)
+                setGeneralAlertOptions({
+                    open: true,
+                    message: 'Uspješno ste dodali pacijenta!',
+                    severity: 'success',
+                    hideAfter: 5000
+                })
             }
         }).catch(err => {
             console.log(err)

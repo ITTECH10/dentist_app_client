@@ -27,13 +27,6 @@ export default function DeleteOrdinationDialog({ ordinationId }) {
     const { setGeneralAlertOptions } = useApp()
     const { ordinations, setOrdinations } = useEmployeeContext()
 
-    let deleteOrdinationTimeout
-    React.useEffect(() => {
-        return () => {
-            clearTimeout(deleteOrdinationTimeout)
-        }
-    }, [])
-
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -51,17 +44,15 @@ export default function DeleteOrdinationDialog({ ordinationId }) {
                 if (res.status === 204) {
                     const updatedOrdinations = ordinations.filter(ordination => ordination._id !== ordinationId)
 
-                    deleteOrdinationTimeout = setTimeout(() => {
-                        setBtnLoading(false)
-                        setOrdinations(updatedOrdinations)
-                        setOpen(false)
-                        setGeneralAlertOptions({
-                            open: true,
-                            message: 'Uspješno ste obrisali ordinaciju!',
-                            severity: 'success',
-                            hideAfter: 5000
-                        })
-                    }, 1000)
+                    setBtnLoading(false)
+                    setOrdinations(updatedOrdinations)
+                    setOpen(false)
+                    setGeneralAlertOptions({
+                        open: true,
+                        message: 'Uspješno ste obrisali ordinaciju!',
+                        severity: 'success',
+                        hideAfter: 5000
+                    })
                 }
             })
     }
