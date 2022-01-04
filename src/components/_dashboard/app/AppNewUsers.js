@@ -39,7 +39,7 @@ export default function AppNewUsers() {
   const { ordinations } = useEmployeeContext()
 
   const textToShow = ordinations
-    ? fShortenNumber(ordinations.length) : <CircularProgress color="error" />
+    ? fShortenNumber(ordinations.length) : <CircularProgress color="info" />
 
   return (
     <RootStyle>

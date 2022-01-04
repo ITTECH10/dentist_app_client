@@ -195,6 +195,8 @@ export default function User() {
                                             const manipulatedEmployeeImage = manipulateCloudinaryImage(employeeImage)
                                             const avatarUrl = gender === 'female' ? '/static/mock-images/avatars/pacient_female_default.png' : '/static/mock-images/avatars/pacient_male_default.png'
                                             const isItemSelected = selected.indexOf(_id) !== -1;
+                                            const formatedRole = role === 'assistant' ? 'Asistent'
+                                                : role === 'director' ? 'Direktor' : role === 'deputy' ? 'Zamjenik' : ''
 
                                             return (
                                                 <TableRow
@@ -223,7 +225,7 @@ export default function User() {
                                                             </Typography>
                                                         </Stack>
                                                     </TableCell>
-                                                    <TableCell align="left">{role}</TableCell>
+                                                    <TableCell align="left">{formatedRole}</TableCell>
                                                     <TableCell align="left">{email}</TableCell>
                                                     <TableCell align="left">{phone}</TableCell>
                                                     <TableCell align="left">

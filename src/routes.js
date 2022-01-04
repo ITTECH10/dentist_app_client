@@ -1,6 +1,3 @@
-// import Products from './pages/Products';
-// import Blog from './pages/Blog';
-// import Ordinations from './pages/Ordinations';
 import { Suspense, lazy } from 'react'
 import Loader from './components/Loader/Loader'
 
@@ -8,7 +5,6 @@ import { Navigate, useRoutes } from 'react-router-dom';
 import { useApp } from './context/AppContext'
 import { useEmployeeContext } from './context/EmployeeContext'
 import { hasPermission, actions } from './utils/DataProviders/ROLES/permissions'
-// const AvatarComponent = lazy(() => import('./AvatarComponent'));
 
 // layouts
 import DashboardLayout from './layouts/dashboard';
@@ -17,7 +13,7 @@ import LogoOnlyLayout from './layouts/LogoOnlyLayout';
 
 const Login = lazy(() => import('./pages/Login'))
 const DashboardApp = lazy(() => import('./pages/DashboardApp'))
-const User = lazy(() => import('./pages/User'))
+const Pacients = lazy(() => import('./pages/Pacients'))
 const Diagnosis = lazy(() => import('./pages/Diagnosis'))
 const OrdinationsAlt = lazy(() => import('./pages/OrdinationsAlt'))
 const Employees = lazy(() => import('./pages/Employees'))
@@ -34,9 +30,8 @@ export default function Router() {
   const match = hasPermission(logedInEmployee, actions.MAIN_ROLE_UI_VISIBILITY)
 
   const MAIN_ROLE_ROUTING = [
-    // { element: <Navigate to={authenticated ? "/dashboard/app" : "/login"} replace /> },
     { path: 'dashboard/app', element: <DashboardApp /> },
-    { path: '/pacients', element: <User /> },
+    { path: '/pacients', element: <Pacients /> },
     { path: '/pacients/:id', element: <PacientDetails /> },
     { path: '/employees', element: <Employees /> },
     { path: '/appointments', element: <Appointments /> },
@@ -48,11 +43,10 @@ export default function Router() {
 
   const SUB_ROLE_ROUTING = [
     { path: 'dashboard/app', element: <DashboardApp /> },
-    { path: '/pacients', element: <User /> },
+    { path: '/pacients', element: <Pacients /> },
     { path: '/pacients/:id', element: <PacientDetails /> },
     { path: '/appointments', element: <Appointments /> },
     { path: '/diagnosis', element: <Diagnosis /> },
-    // { path: 'dashboard/employees', element: <Navigate to="/dashboard/app" /> },
     { path: '/', element: <Navigate to="/dashboard/app" /> },
     { path: '*', element: <NotFound /> }
   ]
@@ -77,7 +71,6 @@ export default function Router() {
       { path: '/forgotPassword', element: <ForgotPassword /> },
       { path: '/resetPassword/:token', element: <ResetPassword /> },
       { path: '404', element: <NotFound /> },
-      // { path: '/', element: <Navigate to='/' /> },
       { path: '*', element: <NotFound /> }
     ]
   }

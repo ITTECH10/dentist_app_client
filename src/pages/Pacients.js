@@ -3,8 +3,8 @@ import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { filter } from 'lodash';
 import { useState } from 'react';
-import { usePacientContext } from './../context/PacientContext';
-import AddPacientDialog from './../components/PACIENTS/AddPacientDialog'
+import { usePacientContext } from '../context/PacientContext';
+import AddPacientDialog from '../components/PACIENTS/AddPacientDialog'
 // material
 import {
   Card,
@@ -27,9 +27,9 @@ import Label from '../components/Label';
 import Scrollbar from '../components/Scrollbar';
 import SearchNotFound from '../components/SearchNotFound';
 import { UserListHead, UserListToolbar } from '../components/_dashboard/user';
-import TableMoreMenu from './../components/_dashboard/user/TableMoreMenu'
-import DeletePacientDialog from './../components/PACIENTS/DeletePacientDialog'
-import EditPacientDialog from './../components/PACIENTS/EditPacientDialog'
+import TableMoreMenu from '../components/_dashboard/user/TableMoreMenu'
+import DeletePacientDialog from '../components/PACIENTS/DeletePacientDialog'
+import EditPacientDialog from '../components/PACIENTS/EditPacientDialog'
 
 //
 import USERLIST from '../_mocks_/user';
@@ -77,7 +77,7 @@ function applySortFilter(array, comparator, query) {
   return stabilizedThis.map((el) => el[0]);
 }
 
-export default function User() {
+export default function Pacients() {
   const navigate = useNavigate()
   const { pacients, getSelectedPacient, getAllPacients } = usePacientContext()
   const [page, setPage] = useState(0);
