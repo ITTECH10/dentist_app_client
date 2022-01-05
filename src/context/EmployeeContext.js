@@ -57,6 +57,7 @@ const EmployeeContextProvider = ({ children }) => {
         setEmployees,
         getAllEmployees,
         logedInEmployee,
+        setLogedInEmployee,
         getLogedInEmployee,
         isSuperAdmin,
         getAllOrdinations,

@@ -31,7 +31,7 @@ const MENU_OPTIONS = [
   {
     label: 'Postavke',
     icon: settings2Fill,
-    linkTo: '#'
+    linkTo: '/settings'
   }
 ];
 

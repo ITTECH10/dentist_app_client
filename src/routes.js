@@ -21,6 +21,7 @@ const PacientDetails = lazy(() => import('./pages/PacientDetails'))
 const Appointments = lazy(() => import('./pages/Appointments'))
 const ForgotPassword = lazy(() => import('./pages/ForgotPassword'))
 const ResetPassword = lazy(() => import('./pages/ResetPassword'))
+const Settings = lazy(() => import('./pages/SettingsPage'))
 const NotFound = lazy(() => import('./pages/Page404'))
 
 export default function Router() {
@@ -37,6 +38,7 @@ export default function Router() {
     { path: '/appointments', element: <Appointments /> },
     { path: '/ordinations', element: <OrdinationsAlt /> },
     { path: '/diagnosis', element: <Diagnosis /> },
+    { path: '/settings', element: <Settings /> },
     { path: '/', element: <Navigate to="/dashboard/app" /> },
     { path: '*', element: <NotFound /> }
   ]
@@ -47,6 +49,7 @@ export default function Router() {
     { path: '/pacients/:id', element: <PacientDetails /> },
     { path: '/appointments', element: <Appointments /> },
     { path: '/diagnosis', element: <Diagnosis /> },
+    { path: '/settings', element: <Settings /> },
     { path: '/', element: <Navigate to="/dashboard/app" /> },
     { path: '*', element: <NotFound /> }
   ]
