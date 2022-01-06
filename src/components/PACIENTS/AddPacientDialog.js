@@ -12,6 +12,9 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import CircularProgress from '@mui/material/CircularProgress';
+import DateTimePicker from '@mui/lab/DateTimePicker';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
 /////////////////////////////////////
 import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
@@ -32,7 +35,7 @@ const genders = [
 const initialFields = {
     firstName: '',
     lastName: '',
-    birthDate: '',
+    birthDate: new Date('1990/01/01').toLocaleString('bs-BA'),
     address: '',
     gender: genders[0].value,
     phone: '',
@@ -130,56 +133,57 @@ export default function AddPacientModal({ onlyIcon }) {
                         Da biste dodali novog pacijenta, molimo vas popunite informacije
                         ispod.
                     </DialogContentText>
-                    <Box
-                        component="form"
-                        onSubmit={handleSubmit}
-                    >
-                        <input
-                            name="photo"
-                            id="photo-input-ref"
-                            type="file"
-                            hidden
-                            onChange={handleImageChange}
-                        />
-                        <Button
-                            variant="contained"
-                            sx={{ mt: 1 }}
-                            onClick={openUploadHandler}
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <Box
+                            component="form"
+                            onSubmit={handleSubmit}
                         >
-                            {fields.pacientImage !== '' ? 'Promjeni sliku' : 'Dodaj sliku'}
-                        </Button>
-                        <TextField
-                            name="firstName"
-                            required
-                            autoFocus
-                            margin="dense"
-                            id="firstName"
-                            label="Ime"
-                            fullWidth
-                            variant="standard"
-                            onChange={handleChange}
-                        />
-                        <TextField
-                            margin="dense"
-                            name="lastName"
-                            required
-                            id="lastName"
-                            label="Prezime"
-                            fullWidth
-                            variant="standard"
-                            onChange={handleChange}
-                        />
-                        <TextField
-                            margin="dense"
-                            name="address"
-                            required
-                            id="address"
-                            label="Adresa"
-                            fullWidth
-                            variant="standard"
-                            onChange={handleChange}
-                        />
-                        <TextField
+                            <input
+                                name="photo"
+                                id="photo-input-ref"
+                                type="file"
+                                hidden
+                                onChange={handleImageChange}
+                            />
+                            <Button
+                                variant="contained"
+                                sx={{ mt: 1 }}
+                                onClick={openUploadHandler}
+                            >
+                                {fields.pacientImage !== '' ? 'Promjeni sliku' : 'Dodaj sliku'}
+                            </Button>
+                            <TextField
+                                name="firstName"
+                                required
+                                autoFocus
+                                margin="dense"
+                                id="firstName"
+                                label="Ime"
+                                fullWidth
+                                variant="standard"
+                                onChange={handleChange}
+                            />
+                            <TextField
+                                margin="dense"
+                                name="lastName"
+                                required
+                                id="lastName"
+                                label="Prezime"
+                                fullWidth
+                                variant="standard"
+                                onChange={handleChange}
+                            />
+                            <TextField
+                                margin="dense"
+                                name="address"
+                                required
+                                id="address"
+                                label="Adresa"
+                                fullWidth
+                                variant="standard"
+                                onChange={handleChange}
+                            />
+                            {/* <TextField
                             id="birthDate"
                             label="Datum rođenja"
                             name="birthDate"
@@ -192,50 +196,59 @@ export default function AddPacientModal({ onlyIcon }) {
                             InputLabelProps={{
                                 shrink: true,
                             }}
-                        />
-                        <TextField
-                            name="gender"
-                            required
-                            id="gender"
-                            select
-                            label="Spol"
-                            fullWidth
-                            variant="standard"
-                            onChange={handleChange}
-                            sx={{ mt: 2 }}
-                            SelectProps={{
-                                native: true,
-                            }}
-                        >
-                            {genders.map((option, idx) => (
-                                <option key={option.id} value={option.value}>
-                                    {option.text}
-                                </option>
-                            ))}
-                        </TextField>
-                        <TextField
-                            name="phone"
-                            required
-                            margin="dense"
-                            id="phone"
-                            label="Telefon"
-                            type="tel"
-                            fullWidth
-                            variant="standard"
-                            onChange={handleChange}
-                        />
-                        <DialogActions>
-                            <Button variant="contained" color="error" onClick={handleClose}>Nazad</Button>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                type="submit"
-                                disabled={Object.values(fields).some(field => field === '')}
+                        /> */}
+                            <DateTimePicker
+                                label="Datum Rođenja"
+                                name="date"
+                                value={fields.birthDate}
+                                ampm={false}
+                                onChange={(value) => setFields({ ...fields, birthDate: value })}
+                                renderInput={(params) => <TextField variant="standard" sx={{ mt: 1, mb: -1 }} fullWidth {...params} />}
+                            />
+                            <TextField
+                                name="gender"
+                                required
+                                id="gender"
+                                select
+                                label="Spol"
+                                fullWidth
+                                variant="standard"
+                                onChange={handleChange}
+                                sx={{ mt: 2 }}
+                                SelectProps={{
+                                    native: true,
+                                }}
                             >
-                                {btnLoading ? <CircularProgress style={{ color: '#fff' }} size={24} /> : 'Gotovo'}
-                            </Button>
-                        </DialogActions>
-                    </Box>
+                                {genders.map((option, idx) => (
+                                    <option key={option.id} value={option.value}>
+                                        {option.text}
+                                    </option>
+                                ))}
+                            </TextField>
+                            <TextField
+                                name="phone"
+                                required
+                                margin="dense"
+                                id="phone"
+                                label="Telefon"
+                                type="tel"
+                                fullWidth
+                                variant="standard"
+                                onChange={handleChange}
+                            />
+                            <DialogActions>
+                                <Button variant="contained" color="error" onClick={handleClose}>Nazad</Button>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    type="submit"
+                                    disabled={Object.values(fields).some(field => field === '')}
+                                >
+                                    {btnLoading ? <CircularProgress style={{ color: '#fff' }} size={24} /> : 'Gotovo'}
+                                </Button>
+                            </DialogActions>
+                        </Box>
+                    </LocalizationProvider>
                 </DialogContent>
             </Dialog>
         </>
