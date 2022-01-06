@@ -43,7 +43,7 @@ const handleUploadBoxOpening = () => {
 const EditMyProfileForm = () => {
     const [fields, setFields] = useState(initialValues)
     const { setGeneralAlertOptions } = useApp()
-    const { logedInEmployee, setLogedInEmployee } = useEmployeeContext()
+    const { logedInEmployee, setLogedInEmployee, setEmployees, employees } = useEmployeeContext()
     const { employeeImage: image, _id, firstName, lastName, email, phone, gender, birthDate: employeeBirthDate } = logedInEmployee
     const manipulatedEmployeeImage = manipulateCloudinaryImage(image)
     const [btnLoading, setBtnLoading] = useState(false)
@@ -60,8 +60,13 @@ const EditMyProfileForm = () => {
             headers: { 'Content-Type': 'application/json' }
         }).then(res => {
             if (res.status === 200) {
-                setLogedInEmployee(res.data.updatedEmployee)
+                // UPDATE EMPLOYEE IMAGE // TODO
+                const employeesCopy = [...employees]
+                const updatingEmployee = employeesCopy.find(employee => employee._id === _id)
+                updatingEmployee.employeeImage = res.data.updatedEmployee.employeeImage
 
+                setEmployees(employeesCopy)
+                setLogedInEmployee(res.data.updatedEmployee)
                 setBtnLoading(false)
                 setGeneralAlertOptions({
                     open: true,
@@ -102,7 +107,7 @@ const EditMyProfileForm = () => {
                     <img src={manipulatedEmployeeImage} alt="employee-profile" style={{ height: '100%', width: '100%', borderRadius: '50%' }} />
                     <Button onClick={handleUploadBoxOpening} sx={{ position: 'absolute', top: '85%', right: '-35%', p: 0, height: 0, width: 0 }} variant="text" startIcon={<PhotoCameraIcon />} />
                 </Box>
-                <Typography>Emir Salihović</Typography>
+                <Typography>{`${firstName} ${lastName}`}</Typography>
             </Stack>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
                 <Box component="form" onSubmit={handleSubmit}>

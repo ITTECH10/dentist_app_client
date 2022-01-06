@@ -53,6 +53,17 @@ const ChangePassword = () => {
             return
         }
 
+        if (fields.password.length < 8) {
+            setBtnLoading(false)
+            setGeneralAlertOptions({
+                open: true,
+                severity: 'error',
+                message: 'Lozinka mora sadržavati minimalno 8 znakova!',
+                hideAfter: 5000
+            })
+            return
+        }
+
         axios.put('/employees/updateMyPassword', { ...fields })
             .then(res => {
                 if (res.status === 200) {

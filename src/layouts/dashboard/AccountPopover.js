@@ -3,7 +3,7 @@ import { useRef, useState } from 'react';
 import { useEmployeeContext } from './../../context/EmployeeContext'
 import { useApp } from './../../context/AppContext'
 import homeFill from '@iconify/icons-eva/home-fill';
-import personFill from '@iconify/icons-eva/person-fill';
+// import personFill from '@iconify/icons-eva/person-fill';
 import settings2Fill from '@iconify/icons-eva/settings-2-fill';
 import { Link as RouterLink } from 'react-router-dom';
 // material
@@ -23,11 +23,11 @@ const MENU_OPTIONS = [
     icon: homeFill,
     linkTo: '/'
   },
-  {
-    label: 'Račun',
-    icon: personFill,
-    linkTo: '#'
-  },
+  // {
+  //   label: 'Račun',
+  //   icon: personFill,
+  //   linkTo: '#'
+  // },
   {
     label: 'Postavke',
     icon: settings2Fill,
